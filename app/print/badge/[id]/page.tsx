@@ -1,23 +1,26 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import QRCode from 'qrcode';
-import { Badge, type OrderForBadge } from '@/components/Badge';
-import { PrintToolbar } from '@/components/PrintToolbar';
-import { requireUser } from '@/lib/auth';
+import { BadgePrinter } from '@/components/BadgePrinter';
+import { isStaff, requireUser } from '@/lib/auth';
 import { one } from '@/lib/format';
+import type { BadgeData } from '@/lib/print/badgeCanvas';
 import { createClient } from '@/lib/supabase/server';
-
-export const dynamic = 'force-dynamic';
+import type { Order } from '@/lib/types';
 
 export const metadata: Metadata = { title: 'Бейджик' };
+export const dynamic = 'force-dynamic';
+
+type OrderForBadge = Order & {
+  products: { name: string; sku: string; color: string | null; dimensions: string | null; brand_photo_url: string | null } | null;
+};
 
 /**
- * Бейджик клиента формата A6 (105×148 мм) для печати через window.print().
- * Работает с телефона мастера: Android (Mopria / встроенная служба печати)
- * и iPhone (AirPrint) находят Wi-Fi принтер сами — драйверы не нужны.
+ * Бейджик клиента для термопринтера Xprinter XP-365B (бумага 80 мм).
+ * Ширина бейджика 76 мм с полями. Печать по Bluetooth (Web Bluetooth)
+ * или через системный диалог window.print().
  */
-export default async function BadgePage({ params, searchParams }: { params: { id: string }; searchParams: { auto?: string } }) {
-  await requireUser();
+export default async function BadgePage({ params }: { params: { id: string } }) {
+  const profile = await requireUser();
 
   const supabase = createClient();
   const { data } = await supabase
@@ -29,31 +32,19 @@ export default async function BadgePage({ params, searchParams }: { params: { id
 
   const order = { ...data, products: one(data.products) } as OrderForBadge;
 
-  // QR с номером заказа — сканируется любым телефоном
-  const qrSvg = await QRCode.toString(order.order_number, {
-    type: 'svg',
-    margin: 0,
-    errorCorrectionLevel: 'M',
-    color: { dark: '#000000', light: '#ffffff' },
-  });
+  const badge: BadgeData = {
+    orderNumber: order.order_number,
+    productName: order.products?.name ?? '—',
+    sku: order.products?.sku ?? '—',
+    color: order.products?.color ?? null,
+    dimensions: order.products?.dimensions ?? null,
+    quantity: order.quantity,
+    photoUrl: order.products?.brand_photo_url ?? null,
+    clientName: order.client_name,
+    clientPhone: order.client_phone,
+    clientAddress: order.client_address,
+    createdAt: order.created_at,
+  };
 
-  return (
-    <>
-      <style>{`
-        @page { size: 105mm 148mm; margin: 0; } /* A6 */
-        html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        @media print {
-          html, body { background: #fff !important; margin: 0; padding: 0; }
-          .no-print { display: none !important; }
-          .sheet-wrap { padding: 0 !important; }
-          .sheet { box-shadow: none !important; margin: 0 !important; }
-        }
-        .qr svg { width: 100%; height: 100%; display: block; }
-      `}</style>
-
-      <PrintToolbar auto={searchParams.auto === '1'} backHref={`/master/order/${order.id}`} />
-
-      <Badge order={order} qrSvg={qrSvg} />
-    </>
-  );
+  return <BadgePrinter data={badge} backHref={isStaff(profile) ? '/admin/orders' : `/master/order/${order.id}`} />;
 }

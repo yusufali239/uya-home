@@ -42,5 +42,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   // Не трогаем статику, PWA-файлы и API (у API своя защита секретами)
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons/|api/).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons/|logo.png|api/).*)'],
 };

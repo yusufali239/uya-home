@@ -59,7 +59,7 @@ export default async function MasterOrderPage({ params }: { params: { id: string
         </div>
       </div>
 
-      <Link href={`/print/badge/${order.id}?auto=1`} className="btn-primary btn-xl">
+      <Link href={`/print/badge/${order.id}`} className="btn-primary btn-xl">
         🖨 Напечатать бейджик клиента
       </Link>
 
