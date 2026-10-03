@@ -7,7 +7,7 @@ import type { BadgeData } from '@/lib/print/badgeCanvas';
 import { createClient } from '@/lib/supabase/server';
 import type { Order } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Бейджик' };
+export const metadata: Metadata = { title: 'Yorliq' };
 export const dynamic = 'force-dynamic';
 
 type OrderForBadge = Order & {

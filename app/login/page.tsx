@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { LoginForm } from './LoginForm';
 
-export const metadata: Metadata = { title: 'Вход' };
+export const metadata: Metadata = { title: 'Kirish' };
 
 export default function LoginPage({ searchParams }: { searchParams: { next?: string } }) {
   return (
@@ -9,7 +9,7 @@ export default function LoginPage({ searchParams }: { searchParams: { next?: str
       <div className="card w-full max-w-sm p-6">
         <div className="mb-6 text-center">
           <div className="text-3xl font-black tracking-tight text-brand-700">UYA HOME</div>
-          <p className="mt-1 text-sm text-gray-500">Склад · Заказы · Раскрой</p>
+          <p className="mt-1 text-sm text-gray-500">Ombor · Buyurtmalar · Kesish</p>
         </div>
         <LoginForm next={searchParams.next ?? ''} />
       </div>

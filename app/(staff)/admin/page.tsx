@@ -41,32 +41,32 @@ export default async function AdminPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-bold">Склад</h1>
+        <h1 className="text-2xl font-bold">Ombor</h1>
         {lowCount > 0 && (
           <Link href="/batches/new" className="badge bg-red-100 px-3 py-1 text-sm text-red-700 hover:bg-red-200">
-            Заканчивается: {lowCount} — создать партию →
+            Tugayapti: {lowCount} — partiya yaratish →
           </Link>
         )}
         <div className="ml-auto flex flex-wrap gap-2">
-          <Link href="/admin/products/new" className="btn-secondary">+ Новый товар</Link>
-          <Link href="/admin/orders/new" className="btn-primary">+ Новый заказ</Link>
+          <Link href="/admin/products/new" className="btn-secondary">+ Yangi mahsulot</Link>
+          <Link href="/admin/orders/new" className="btn-primary">+ Yangi buyurtma</Link>
         </div>
       </div>
 
       {products.length === 0 ? (
         <div className="card py-12 text-center text-gray-500">
-          Товаров пока нет. Нажмите «+ Новый товар».
+          Hozircha mahsulot yoʻq. «+ Yangi mahsulot» tugmasini bosing.
         </div>
       ) : (
         <div className="card overflow-x-auto p-0">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
-                <th className="px-4 py-3">Фото</th>
-                <th className="px-4 py-3">Название</th>
-                <th className="px-4 py-3 text-right">На складе</th>
-                <th className="px-4 py-3 text-right">Минимум</th>
-                <th className="px-4 py-3">Статус</th>
+                <th className="px-4 py-3">Rasm</th>
+                <th className="px-4 py-3">Nomi</th>
+                <th className="px-4 py-3 text-right">Omborda</th>
+                <th className="px-4 py-3 text-right">Minimum</th>
+                <th className="px-4 py-3">Holat</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -81,7 +81,7 @@ export default async function AdminPage() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={p.brand_photo_url} alt={p.name} className="h-12 w-12 rounded-lg object-cover ring-1 ring-black/10" />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">нет</div>
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-400">yoʻq</div>
                       )}
                     </td>
                     <td className="px-4 py-2">
@@ -97,7 +97,7 @@ export default async function AdminPage() {
                     <td className={`px-4 py-2 text-right text-lg font-bold ${low ? 'text-red-600' : ''}`}>
                       {qty}
                       {waitingQty > 0 && (
-                        <div className="text-xs font-medium text-amber-700">ждут: {waitingQty}</div>
+                        <div className="text-xs font-medium text-amber-700">kutmoqda: {waitingQty}</div>
                       )}
                     </td>
                     <td className="px-4 py-2 text-right text-gray-600">{p.min_quantity}</td>

@@ -2,7 +2,6 @@ import 'server-only';
 import { Telegraf } from 'telegraf';
 import { APP_URL, masterChatIds, requireServerEnv } from '@/lib/env';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { plural } from '@/lib/format';
 
 let bot: Telegraf | null = null;
 
@@ -21,20 +20,20 @@ export function getBot(): Telegraf {
     const webApp = APP_URL.startsWith('https://');
     await ctx.reply(
       [
-        '👋 Это бот UYA HOME.',
+        '👋 Bu UYA HOME boti.',
         '',
         webApp
-          ? 'Нажмите «Открыть UYA HOME» — откроется ваш рабочий экран. В первый раз войдите своим email и паролем, дальше — без пароля.'
+          ? '«UYA HOMEʼni ochish» tugmasini bosing — ish ekraningiz ochiladi. Birinchi marta email va parolingiz bilan kiring, keyin — parolsiz.'
           : '',
         '',
-        'Сюда приходят: 📦 заказы на отправку, 🪚 партии раскроя, ⚠️ сигналы склада, 💰 записи для подтверждения.',
+        'Bu yerga keladi: 📦 joʻnatiladigan buyurtmalar, 🪚 kesish partiyalari, ⚠️ ombor ogohlantirishlari, 💰 tasdiqlash uchun yozuvlar.',
         '',
-        `Ваш chat_id: ${chatId}`,
+        `Sizning chat_id: ${chatId}`,
       ]
         .filter((line, i, all) => line !== '' || all[i - 1] !== '')
         .join('\n'),
       webApp
-        ? { reply_markup: { inline_keyboard: [[{ text: '📱 Открыть UYA HOME', web_app: { url: `${APP_URL}/tg` } }]] } }
+        ? { reply_markup: { inline_keyboard: [[{ text: '📱 UYA HOMEʼni ochish', web_app: { url: `${APP_URL}/tg` } }]] } }
         : undefined,
     );
   });
@@ -47,13 +46,13 @@ export function getBot(): Telegraf {
       .eq('telegram_id', ctx.chat.id)
       .maybeSingle();
     if (!linked && !masterChatIds().includes(String(ctx.chat.id))) {
-      await ctx.reply('Сначала откройте UYA HOME кнопкой в меню и войдите — тогда бот вас узнает.');
+      await ctx.reply('Avval menyudagi tugma orqali UYA HOMEʼni oching va kiring — shunda bot sizni taniydi.');
       return;
     }
     await ctx.reply(await buildTasksText(), { link_preview_options: { is_disabled: true } });
   });
 
-  bot.help((ctx) => ctx.reply('/start — подключение\n/tasks — текущие задачи'));
+  bot.help((ctx) => ctx.reply('/start — ulanish\n/tasks — joriy vazifalar'));
 
   return bot;
 }
@@ -75,27 +74,27 @@ async function buildTasksText(): Promise<string> {
       .order('created_at'),
   ]);
 
-  const lines: string[] = ['📋 Задачи на сейчас'];
+  const lines: string[] = ['📋 Hozirgi vazifalar'];
 
   if (batches?.length) {
-    lines.push('', '🪚 Партии:');
+    lines.push('', '🪚 Partiyalar:');
     for (const b of batches) {
-      const state = b.status === 'in_progress' ? 'в работе' : 'новая';
+      const state = b.status === 'in_progress' ? 'ishda' : 'yangi';
       lines.push(
-        `• Партия №${b.batch_number} — ${b.ldsp_sheet_count} ${plural(b.ldsp_sheet_count, ['лист', 'листа', 'листов'])} (${state})`,
+        `• №${b.batch_number} partiya — ${b.ldsp_sheet_count} list (${state})`,
       );
     }
   }
 
   if (orders?.length) {
-    lines.push('', '📦 К отправке:');
+    lines.push('', '📦 Joʻnatish uchun:');
     for (const o of orders) {
       const product = Array.isArray(o.products) ? o.products[0] : o.products;
       lines.push(`• №${o.order_number}: ${product?.name ?? '?'} × ${o.quantity} — ${o.client_name}`);
     }
   }
 
-  if (lines.length === 1) lines.push('', 'Задач нет 🎉');
+  if (lines.length === 1) lines.push('', 'Vazifalar yoʻq 🎉');
   if (APP_URL) lines.push('', `${APP_URL}/master`);
   return lines.join('\n');
 }

@@ -30,7 +30,7 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
   return (
     <form action={action} className="space-y-5">
       <section className="card space-y-3">
-        <h2 className="font-semibold">1. Откуда заказ?</h2>
+        <h2 className="font-semibold">1. Buyurtma qayerdan?</h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {SOURCES.map((source) => (
             <label key={source} className="cursor-pointer">
@@ -44,10 +44,10 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
       </section>
 
       <section className="card space-y-3">
-        <h2 className="font-semibold">2. Что заказали?</h2>
+        <h2 className="font-semibold">2. Nima buyurtma qilindi?</h2>
         <div className="grid gap-3 sm:grid-cols-[1fr_8rem]">
           <div>
-            <label className="label" htmlFor="product_id">Товар</label>
+            <label className="label" htmlFor="product_id">Mahsulot</label>
             <select
               id="product_id"
               name="product_id"
@@ -56,16 +56,16 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
             >
-              <option value="">— выберите —</option>
+              <option value="">— tanlang —</option>
               {products.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} ({p.sku}{p.color ? `, ${p.color}` : ''}) — на складе {p.stock}
+                  {p.name} ({p.sku}{p.color ? `, ${p.color}` : ''}) — omborda {p.stock}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="label" htmlFor="quantity">Кол-во</label>
+            <label className="label" htmlFor="quantity">Soni</label>
             <input
               id="quantity"
               name="quantity"
@@ -85,31 +85,31 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
             }`}
           >
             {inStock
-              ? `✅ Есть на складе (${selected.stock} шт.) — заказ сразу уйдёт мастеру на отправку`
-              : `⏳ На складе ${selected.stock} шт. — заказ будет ждать производства`}
+              ? `✅ Omborda bor (${selected.stock} dona) — buyurtma darhol ustaga joʻnatishga ketadi`
+              : `⏳ Omborda ${selected.stock} dona — buyurtma ishlab chiqarishni kutadi`}
           </p>
         )}
       </section>
 
       <section className="card space-y-3">
-        <h2 className="font-semibold">3. Клиент</h2>
+        <h2 className="font-semibold">3. Mijoz</h2>
         <div>
-          <label className="label" htmlFor="client_name">ФИО</label>
+          <label className="label" htmlFor="client_name">F.I.Sh.</label>
           <input id="client_name" name="client_name" required autoComplete="off" className="input" />
         </div>
         <div>
-          <label className="label" htmlFor="client_phone">Телефон</label>
+          <label className="label" htmlFor="client_phone">Telefon</label>
           <input id="client_phone" name="client_phone" type="tel" required placeholder="+996 ___ ___ ___" className="input" />
         </div>
         <div>
-          <label className="label" htmlFor="client_address">Адрес доставки</label>
+          <label className="label" htmlFor="client_address">Yetkazib berish manzili</label>
           <textarea id="client_address" name="client_address" required rows={2} className="input" />
         </div>
       </section>
 
       <FormMessage state={state} />
-      <SubmitButton className="btn-primary w-full py-3 text-lg" pendingText="Создаю заказ…">
-        Создать заказ
+      <SubmitButton className="btn-primary w-full py-3 text-lg" pendingText="Buyurtma yaratilmoqda…">
+        Buyurtma yaratish
       </SubmitButton>
     </form>
   );

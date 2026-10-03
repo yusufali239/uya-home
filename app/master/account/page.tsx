@@ -7,7 +7,7 @@ export default async function MasterAccountPage() {
   const profile = await requireUser();
   return (
     <>
-      <h1 className="text-2xl font-bold">Профиль</h1>
+      <h1 className="text-2xl font-bold">Profil</h1>
       <AccountPanel profile={profile} />
     </>
   );

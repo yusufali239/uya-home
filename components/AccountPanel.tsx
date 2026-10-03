@@ -27,21 +27,21 @@ export async function AccountPanel({ profile }: { profile: Profile }) {
         {profile.telegram_id ? (
           <>
             <p className="text-gray-700">
-              ✅ Привязан. Приложение в Telegram открывается без пароля, уведомления приходят вам лично.
+              ✅ Bogʻlangan. Telegramʼdagi ilova parolsiz ochiladi, xabarlar sizga shaxsan keladi.
             </p>
             <form action={unlinkTelegram}>
-              <button className="btn-secondary w-full">Отвязать Telegram</button>
+              <button className="btn-secondary w-full">Telegramni uzish</button>
             </form>
           </>
         ) : (
           <p className="text-gray-700">
-            Не привязан. Откройте бота и нажмите кнопку <b>«UYA HOME»</b> внизу чата — после входа Telegram привяжется сам.
+            Bogʻlanmagan. Botni oching va chat pastidagi <b>«UYA HOME»</b> tugmasini bosing — kirgandan keyin Telegram oʻzi bogʻlanadi.
           </p>
         )}
       </div>
 
       <form action={signOut}>
-        <button className="btn-secondary w-full text-red-600">Выйти из аккаунта</button>
+        <button className="btn-secondary w-full text-red-600">Akkauntdan chiqish</button>
       </form>
     </div>
   );

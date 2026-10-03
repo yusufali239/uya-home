@@ -210,7 +210,7 @@ export async function renderBadge(data: BadgeData, width: number): Promise<HTMLC
   }
 
   ctx.font = `700 ${Math.round(3.6 * DOTS_PER_MM)}px ${FONT}`;
-  ctx.fillText(`Код: ${data.sku}    Кол-во: ${data.quantity} шт.`, pad, y);
+  ctx.fillText(`Kod: ${data.sku}    Soni: ${data.quantity} dona`, pad, y);
   y += Math.round(3.6 * DOTS_PER_MM * 1.3);
 
   const details = [data.color, data.dimensions].filter(Boolean).join(' · ');
@@ -229,7 +229,7 @@ export async function renderBadge(data: BadgeData, width: number): Promise<HTMLC
   y += 2 + DOTS_PER_MM * 1.5;
 
   ctx.font = `700 ${Math.round(2.8 * DOTS_PER_MM)}px ${FONT}`;
-  ctx.fillText('ПОЛУЧАТЕЛЬ', pad, y);
+  ctx.fillText('QABUL QILUVCHI', pad, y);
   y += Math.round(2.8 * DOTS_PER_MM * 1.4);
 
   ctx.font = `800 ${Math.round(5.5 * DOTS_PER_MM)}px ${FONT}`;
@@ -239,7 +239,7 @@ export async function renderBadge(data: BadgeData, width: number): Promise<HTMLC
   }
 
   ctx.font = `800 ${Math.round(5 * DOTS_PER_MM)}px ${FONT}`;
-  ctx.fillText(`Тел. ${data.clientPhone}`, pad, y);
+  ctx.fillText(`Tel. ${data.clientPhone}`, pad, y);
   y += Math.round(5 * DOTS_PER_MM * 1.25);
 
   ctx.font = `500 ${Math.round(4 * DOTS_PER_MM)}px ${FONT}`;
@@ -258,7 +258,7 @@ export async function renderBadge(data: BadgeData, width: number): Promise<HTMLC
 
   const textX = pad + qrSize + gap * 1.5;
   ctx.font = `500 ${Math.round(3 * DOTS_PER_MM)}px ${FONT}`;
-  ctx.fillText('Заказ', textX, y + DOTS_PER_MM * 3);
+  ctx.fillText('Buyurtma', textX, y + DOTS_PER_MM * 3);
   ctx.font = `900 ${8 * DOTS_PER_MM}px ${FONT}`;
   ctx.fillText(data.orderNumber, textX, y + DOTS_PER_MM * 7, width - pad - textX);
   ctx.font = `500 ${Math.round(3 * DOTS_PER_MM)}px ${FONT}`;

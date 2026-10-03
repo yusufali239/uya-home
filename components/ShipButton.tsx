@@ -13,7 +13,7 @@ interface Props {
   redirectTo?: string;
 }
 
-export function ShipButton({ orderId, className = 'btn-success', label = 'Отгружен', redirectTo }: Props) {
+export function ShipButton({ orderId, className = 'btn-success', label = 'Joʻnatildi', redirectTo }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState('');
@@ -25,7 +25,7 @@ export function ShipButton({ orderId, className = 'btn-success', label = 'Отг
         className={className}
         disabled={pending}
         onClick={() => {
-          if (!confirm('Подтвердить отгрузку заказа?')) return;
+          if (!confirm('Buyurtma joʻnatilganini tasdiqlaysizmi?')) return;
           startTransition(async () => {
             const result = await shipOrder(orderId);
             setError(result.error ?? '');
@@ -33,7 +33,7 @@ export function ShipButton({ orderId, className = 'btn-success', label = 'Отг
           });
         }}
       >
-        {pending ? 'Сохраняю…' : label}
+        {pending ? 'Saqlanmoqda…' : label}
       </button>
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </>

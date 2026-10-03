@@ -30,7 +30,7 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
   function submit() {
     const n = Number(value.replace(',', '.'));
     if (!Number.isFinite(n) || n < 0 || (mode !== 'count' && n === 0)) {
-      setError('Введите количество');
+      setError('Sonini kiriting');
       return;
     }
     startTransition(async () => {
@@ -49,7 +49,7 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
         <div className="min-w-0 flex-1">
           <div className="text-lg font-semibold leading-tight">{supply.name}</div>
           <div className="text-xs text-gray-500">
-            {supply.location && `📍 ${supply.location} · `}минимум {formatQty(supply.min_quantity)} {supply.unit}
+            {supply.location && `📍 ${supply.location} · `}minimum {formatQty(supply.min_quantity)} {supply.unit}
           </div>
         </div>
         <div className={`text-right text-2xl font-black ${low ? 'text-red-600' : ''}`}>
@@ -60,11 +60,11 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
 
       {mode === 'view' && (
         <div className="grid grid-cols-3 gap-2">
-          <button className="btn-secondary py-3" onClick={() => open('take')}>− Взял</button>
-          <button className="btn-secondary py-3" onClick={() => open('add')}>+ Пришло</button>
-          <button className="btn-secondary py-3" onClick={() => open('count')}>Пересчёт</button>
+          <button className="btn-secondary py-3" onClick={() => open('take')}>− Oldim</button>
+          <button className="btn-secondary py-3" onClick={() => open('add')}>+ Keldi</button>
+          <button className="btn-secondary py-3" onClick={() => open('count')}>Qayta sanash</button>
           <button className="col-span-3 text-sm text-gray-500 hover:underline" onClick={() => open('edit')}>
-            Изменить карточку
+            Kartochkani tahrirlash
           </button>
         </div>
       )}
@@ -72,7 +72,7 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
       {(mode === 'take' || mode === 'add' || mode === 'count') && (
         <div className="space-y-2">
           <div className="text-sm font-medium">
-            {mode === 'take' ? 'Сколько взяли?' : mode === 'add' ? 'Сколько пришло?' : 'Сколько есть на самом деле?'}
+            {mode === 'take' ? 'Qancha oldingiz?' : mode === 'add' ? 'Qancha keldi?' : 'Aslida qancha bor?'}
           </div>
           <div className="flex gap-2">
             <input
@@ -89,13 +89,13 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
             value={note}
             onChange={(e) => setNote(e.target.value)}
             className="input text-sm"
-            placeholder={mode === 'take' ? 'На что (необязательно): Партия №3' : 'Комментарий (необязательно)'}
+            placeholder={mode === 'take' ? 'Nimaga (ixtiyoriy): №3 partiya' : 'Izoh (ixtiyoriy)'}
           />
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
           <div className="grid grid-cols-2 gap-2">
-            <button className="btn-secondary py-3" onClick={() => setMode('view')} disabled={pending}>Отмена</button>
+            <button className="btn-secondary py-3" onClick={() => setMode('view')} disabled={pending}>Bekor qilish</button>
             <button className="btn-primary py-3" onClick={submit} disabled={pending}>
-              {pending ? '…' : 'Сохранить'}
+              {pending ? '…' : 'Saqlash'}
             </button>
           </div>
         </div>
@@ -103,30 +103,30 @@ export function SupplyCard({ supply, low, canDelete }: { supply: Supply; low: bo
 
       {mode === 'edit' && (
         <form action={editAction} className="space-y-2">
-          <input name="name" defaultValue={supply.name} required className="input" aria-label="Название" />
+          <input name="name" defaultValue={supply.name} required className="input" aria-label="Nomi" />
           <div className="grid grid-cols-2 gap-2">
-            <input name="unit" defaultValue={supply.unit} className="input" aria-label="Единица" placeholder="шт" />
-            <input name="min_quantity" defaultValue={String(Number(supply.min_quantity))} inputMode="decimal" className="input" aria-label="Минимум" />
+            <input name="unit" defaultValue={supply.unit} className="input" aria-label="Birlik" placeholder="dona" />
+            <input name="min_quantity" defaultValue={String(Number(supply.min_quantity))} inputMode="decimal" className="input" aria-label="Minimum" />
           </div>
-          <input name="location" defaultValue={supply.location ?? ''} className="input" placeholder="Где лежит" aria-label="Где лежит" />
+          <input name="location" defaultValue={supply.location ?? ''} className="input" placeholder="Qayerda turadi" aria-label="Qayerda turadi" />
           <FormMessage state={editState} />
           <div className="grid grid-cols-2 gap-2">
-            <button type="button" className="btn-secondary" onClick={() => setMode('view')}>Закрыть</button>
-            <SubmitButton>Сохранить</SubmitButton>
+            <button type="button" className="btn-secondary" onClick={() => setMode('view')}>Yopish</button>
+            <SubmitButton>Saqlash</SubmitButton>
           </div>
           {canDelete && (
             <button
               type="button"
               className="w-full text-sm text-red-600 hover:underline"
               onClick={() => {
-                if (!confirm(`Удалить «${supply.name}» вместе с журналом?`)) return;
+                if (!confirm(`«${supply.name}» jurnali bilan birga oʻchirilsinmi?`)) return;
                 startTransition(async () => {
                   const result = await deleteSupply(supply.id);
                   if (result.error) setError(result.error);
                 });
               }}
             >
-              Удалить позицию
+              Pozitsiyani oʻchirish
             </button>
           )}
         </form>

@@ -34,9 +34,9 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
     return (
       <div className="card space-y-4 p-6 text-center">
         <div className="text-5xl">✅</div>
-        <div className="text-xl font-semibold">Партия завершена</div>
+        <div className="text-xl font-semibold">Partiya yakunlandi</div>
         {done && <p className="text-lg text-gray-600">{done}</p>}
-        <button className="btn-primary btn-xl" onClick={() => router.push('/master')}>К задачам</button>
+        <button className="btn-primary btn-xl" onClick={() => router.push('/master')}>Vazifalarga</button>
       </div>
     );
   }
@@ -74,12 +74,12 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
     <>
       {status === 'planned' && (
         <button className="btn-primary btn-xl" disabled={pending} onClick={onStart}>
-          {pending ? 'Сохраняю…' : '✋ Детали принял'}
+          {pending ? 'Saqlanmoqda…' : '✋ Detallarni qabul qildim'}
         </button>
       )}
       {status === 'in_progress' && (
         <button className="btn-success btn-xl" onClick={() => setOpen(true)}>
-          ✅ Готов
+          ✅ Tayyor
         </button>
       )}
       {error && !open && <p className="text-center text-lg font-medium text-red-600">{error}</p>}
@@ -89,8 +89,8 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center" role="dialog" aria-modal="true">
           <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-white p-5 sm:rounded-3xl">
             <div className="mb-4 flex items-center">
-              <h2 className="text-2xl font-bold">Что получилось?</h2>
-              <button className="ml-auto p-2 text-3xl leading-none text-gray-400" onClick={() => setOpen(false)} aria-label="Закрыть">
+              <h2 className="text-2xl font-bold">Nima chiqdi?</h2>
+              <button className="ml-auto p-2 text-3xl leading-none text-gray-400" onClick={() => setOpen(false)} aria-label="Yopish">
                 ×
               </button>
             </div>
@@ -99,7 +99,7 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
               {items.map((i) => (
                 <div key={i.id} className="rounded-2xl bg-gray-50 p-3">
                   <div className="text-lg font-semibold">{i.name}</div>
-                  <div className="text-sm text-gray-500">план: {i.planned} шт.</div>
+                  <div className="text-sm text-gray-500">reja: {i.planned} dona</div>
                   <div className="mt-2 flex items-center gap-3">
                     <button type="button" className="btn-secondary h-14 w-14 text-3xl" onClick={() => setQty(i.id, (produced[i.id] ?? 0) - 1)}>
                       −
@@ -120,7 +120,7 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
               ))}
             </div>
 
-            <h3 className="mb-2 mt-6 text-xl font-bold">Обрезки</h3>
+            <h3 className="mb-2 mt-6 text-xl font-bold">Qoldiqlar</h3>
             <div className="space-y-2">
               {remnants.map((r, index) => (
                 <div key={index} className="grid grid-cols-[1fr_1fr_4rem_2.5rem] gap-2">
@@ -132,7 +132,7 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
                     inputMode="text"
                   />
                   <input
-                    placeholder="Цвет"
+                    placeholder="Rangi"
                     value={r.color}
                     onChange={(e) => updateRemnant(index, { color: e.target.value })}
                     className="input text-lg"
@@ -148,7 +148,7 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
                     type="button"
                     className="text-2xl text-gray-400"
                     onClick={() => setRemnants((list) => list.filter((_, i) => i !== index))}
-                    aria-label="Удалить обрезок"
+                    aria-label="Qoldiqni oʻchirish"
                   >
                     ×
                   </button>
@@ -159,14 +159,14 @@ export function BatchActions({ batchId, status, items }: { batchId: string; stat
                 className="btn-secondary w-full py-3 text-lg"
                 onClick={() => setRemnants((list) => [...list, { size: '', color: items[0]?.color ?? '', quantity: 1 }])}
               >
-                + Добавить обрезок
+                + Qoldiq qoʻshish
               </button>
             </div>
 
             {error && <p className="mt-4 text-center text-lg font-medium text-red-600">{error}</p>}
 
             <button className="btn-success btn-xl mt-6" disabled={pending} onClick={onComplete}>
-              {pending ? 'Сохраняю…' : 'Сохранить и закрыть партию'}
+              {pending ? 'Saqlanmoqda…' : 'Saqlash va partiyani yopish'}
             </button>
           </div>
         </div>

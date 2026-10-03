@@ -23,7 +23,7 @@ export function money(formData: FormData, key: string): number {
 
 /** Человекочитаемая ошибка Postgres/PostgREST */
 export function dbError(error: { code?: string; message: string }): string {
-  if (error.code === '23505') return 'Такой артикул (SKU) уже существует';
-  if (error.code === '42501') return 'Недостаточно прав';
+  if (error.code === '23505') return 'Bunday artikul (SKU) allaqachon mavjud';
+  if (error.code === '42501') return 'Huquq yetarli emas';
   return error.message;
 }

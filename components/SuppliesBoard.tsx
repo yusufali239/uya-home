@@ -32,13 +32,13 @@ export async function SuppliesBoard({ canDelete, showHistory }: { canDelete: boo
   return (
     <div className="space-y-4">
       {lowCount > 0 && (
-        <div className="rounded-xl bg-red-50 px-4 py-3 font-medium text-red-700">Заканчивается позиций: {lowCount}</div>
+        <div className="rounded-xl bg-red-50 px-4 py-3 font-medium text-red-700">Tugayotgan pozitsiyalar: {lowCount}</div>
       )}
 
       <SupplyCreateForm />
 
       {supplies.length === 0 ? (
-        <div className="card py-10 text-center text-gray-500">Пока пусто. Добавьте первую позицию — например «Евровинт 7×50».</div>
+        <div className="card py-10 text-center text-gray-500">Hozircha boʻsh. Birinchi pozitsiyani qoʻshing — masalan «Yevrovint 7×50».</div>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {supplies.map((s) => (
@@ -49,7 +49,7 @@ export async function SuppliesBoard({ canDelete, showHistory }: { canDelete: boo
 
       {showHistory && movements.length > 0 && (
         <div className="card p-0">
-          <h2 className="border-b px-4 py-3 font-semibold">Журнал движения</h2>
+          <h2 className="border-b px-4 py-3 font-semibold">Harakat jurnali</h2>
           <ul className="divide-y text-sm">
             {movements.map((m) => (
               <li key={m.id} className="flex flex-wrap items-center gap-x-3 px-4 py-2">

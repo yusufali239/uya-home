@@ -103,7 +103,7 @@ export async function flushNotifications(): Promise<{ sent: number; failed: numb
           if (webAppButtons) {
             await telegram.sendMessage(chatId, n.message, {
               reply_markup: {
-                inline_keyboard: [[{ text: 'Открыть', web_app: { url: `${APP_URL}/tg?next=${encodeURIComponent(path)}` } }]],
+                inline_keyboard: [[{ text: 'Ochish', web_app: { url: `${APP_URL}/tg?next=${encodeURIComponent(path)}` } }]],
               },
             });
           } else {

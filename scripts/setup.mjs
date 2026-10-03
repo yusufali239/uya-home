@@ -185,7 +185,7 @@ async function createDirector() {
     const { data } = await http(`${supabaseUrl}/auth/v1/admin/users`, {
       method: 'POST',
       headers,
-      body: { email, password, email_confirm: true, user_metadata: { full_name: env.DIRECTOR_NAME || 'Директор' } },
+      body: { email, password, email_confirm: true, user_metadata: { full_name: env.DIRECTOR_NAME || 'Direktor' } },
     });
     user = data;
     summary.director = { email, password };

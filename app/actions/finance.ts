@@ -22,9 +22,9 @@ export async function addFinanceEntry(_prev: ActionState, formData: FormData): P
   const amount = Number(String(formData.get('amount') ?? '').replace(/\s/g, '').replace(',', '.'));
   const toPerson = str(formData, 'to_person_id');
 
-  if (!kind || !KINDS.includes(kind)) return { error: 'Выберите: расход, приход или передача' };
-  if (!Number.isFinite(amount) || amount <= 0) return { error: 'Введите сумму' };
-  if (kind === 'transfer' && !toPerson) return { error: 'Кому переданы деньги?' };
+  if (!kind || !KINDS.includes(kind)) return { error: 'Tanlang: chiqim, kirim yoki topshirish' };
+  if (!Number.isFinite(amount) || amount <= 0) return { error: 'Summani kiriting' };
+  if (kind === 'transfer' && !toPerson) return { error: 'Pul kimga berildi?' };
 
   const supabase = createClient();
   const { error } = await supabase.rpc('add_finance_entry', {
@@ -40,7 +40,7 @@ export async function addFinanceEntry(_prev: ActionState, formData: FormData): P
 
   await flushNotifications();
   refresh();
-  return { ok: true, message: 'Записано' };
+  return { ok: true, message: 'Yozildi' };
 }
 
 /** Подтвердить или отклонить запись мастера */

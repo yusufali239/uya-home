@@ -10,11 +10,11 @@ export async function signIn(_prev: ActionState, formData: FormData): Promise<Ac
   const password = String(formData.get('password') ?? '');
   const next = String(formData.get('next') ?? '');
 
-  if (!email || !password) return { error: 'Введите email и пароль' };
+  if (!email || !password) return { error: 'Email va parolni kiriting' };
 
   const supabase = createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: 'Неверный email или пароль' };
+  if (error) return { error: 'Email yoki parol notoʻgʻri' };
 
   // Разрешаем только внутренние пути (защита от open redirect)
   redirect(next.startsWith('/') && !next.startsWith('//') ? next : '/');

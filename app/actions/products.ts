@@ -23,12 +23,12 @@ function readProduct(formData: FormData) {
     instruction_url: str(formData, 'instruction_url'),
   };
 
-  if (!product.name) return { error: 'Укажите название товара' } as const;
-  if (!product.sku) return { error: 'Укажите артикул (SKU)' } as const;
-  if (!Number.isFinite(product.price) || product.price < 0) return { error: 'Неверная цена' } as const;
-  if (!Number.isFinite(product.cost_price) || product.cost_price < 0) return { error: 'Неверная себестоимость' } as const;
+  if (!product.name) return { error: 'Mahsulot nomini kiriting' } as const;
+  if (!product.sku) return { error: 'Artikulni (SKU) kiriting' } as const;
+  if (!Number.isFinite(product.price) || product.price < 0) return { error: 'Narx notoʻgʻri' } as const;
+  if (!Number.isFinite(product.cost_price) || product.cost_price < 0) return { error: 'Tannarx notoʻgʻri' } as const;
   if (!Number.isInteger(product.min_quantity) || product.min_quantity < 0) {
-    return { error: 'Минимальный остаток — целое число ≥ 0' } as const;
+    return { error: 'Minimal qoldiq — butun son ≥ 0' } as const;
   }
   return { product } as const;
 }
@@ -40,7 +40,7 @@ export async function createProduct(_prev: ActionState, formData: FormData): Pro
   if ('error' in parsed) return { error: parsed.error };
 
   const quantity = int(formData, 'quantity');
-  if (!Number.isInteger(quantity) || quantity < 0) return { error: 'Остаток — целое число ≥ 0' };
+  if (!Number.isInteger(quantity) || quantity < 0) return { error: 'Qoldiq — butun son ≥ 0' };
 
   const supabase = createClient();
   const { data, error } = await supabase.from('products').insert(parsed.product).select('id').single();
@@ -71,7 +71,7 @@ export async function updateProduct(id: string, _prev: ActionState, formData: Fo
   const originalQuantity = int(formData, 'original_quantity');
   const location = str(formData, 'location');
   const originalLocation = str(formData, 'original_location');
-  if (!Number.isInteger(quantity) || quantity < 0) return { error: 'Остаток — целое число ≥ 0' };
+  if (!Number.isInteger(quantity) || quantity < 0) return { error: 'Qoldiq — butun son ≥ 0' };
 
   const supabase = createClient();
   const { error } = await supabase.from('products').update(parsed.product).eq('id', id);
@@ -94,5 +94,5 @@ export async function updateProduct(id: string, _prev: ActionState, formData: Fo
   await flushNotifications();
   revalidatePath('/admin');
   revalidatePath(`/admin/products/${id}`);
-  return { ok: true, message: 'Сохранено' };
+  return { ok: true, message: 'Saqlandi' };
 }

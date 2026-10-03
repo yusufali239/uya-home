@@ -4,7 +4,7 @@ import { OrderForm, type OrderProductOption } from '@/components/OrderForm';
 import { one } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata: Metadata = { title: 'Новый заказ' };
+export const metadata: Metadata = { title: 'Yangi buyurtma' };
 export const dynamic = 'force-dynamic';
 
 export default async function NewOrderPage() {
@@ -24,11 +24,11 @@ export default async function NewOrderPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
-      <Link href="/admin/orders" className="text-sm text-brand-600 hover:underline">← Заказы</Link>
-      <h1 className="text-2xl font-bold">Новый заказ</h1>
+      <Link href="/admin/orders" className="text-sm text-brand-600 hover:underline">← Buyurtmalar</Link>
+      <h1 className="text-2xl font-bold">Yangi buyurtma</h1>
       {products.length === 0 ? (
         <div className="card text-gray-500">
-          Сначала добавьте товар: <Link href="/admin/products/new" className="text-brand-600 underline">+ Новый товар</Link>
+          Avval mahsulot qoʻshing: <Link href="/admin/products/new" className="text-brand-600 underline">+ Yangi mahsulot</Link>
         </div>
       ) : (
         <OrderForm products={products} />

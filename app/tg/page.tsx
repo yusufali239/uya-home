@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { TgEntry } from './TgEntry';
 
-export const metadata: Metadata = { title: 'Вход через Telegram' };
+export const metadata: Metadata = { title: 'Telegram orqali kirish' };
 
 /**
  * Точка входа Telegram Mini App (кнопка «UYA HOME» в боте).

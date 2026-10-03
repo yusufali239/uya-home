@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const LINKS = [
-  { href: '/admin', label: 'Склад', exact: true },
-  { href: '/admin/orders', label: 'Заказы' },
-  { href: '/batches', label: 'Партии' },
-  { href: '/admin/supplies', label: 'Мелочи' },
-  { href: '/admin/finance', label: 'Бухгалтерия' },
-  { href: '/admin/remnants', label: 'Обрезки' },
-  { href: '/master', label: 'Экран мастера' },
+  { href: '/admin', label: 'Ombor', exact: true },
+  { href: '/admin/orders', label: 'Buyurtmalar' },
+  { href: '/batches', label: 'Partiyalar' },
+  { href: '/admin/supplies', label: 'Materiallar' },
+  { href: '/admin/finance', label: 'Buxgalteriya' },
+  { href: '/admin/remnants', label: 'Qoldiqlar' },
+  { href: '/master', label: 'Usta ekrani' },
 ];
 
 /** Верхнее меню админки с подсветкой текущего раздела */
@@ -18,8 +18,8 @@ export function StaffNav({ isDirector }: { isDirector: boolean }) {
   const pathname = usePathname();
   const links = [
     ...LINKS,
-    ...(isDirector ? [{ href: '/admin/users', label: 'Сотрудники' }] : []),
-    { href: '/admin/account', label: 'Профиль' },
+    ...(isDirector ? [{ href: '/admin/users', label: 'Xodimlar' }] : []),
+    { href: '/admin/account', label: 'Profil' },
   ];
 
   return (

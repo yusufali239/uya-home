@@ -16,12 +16,12 @@ export function LoginForm({ next }: { next: string }) {
         <input id="email" name="email" type="email" autoComplete="email" required className="input" />
       </div>
       <div>
-        <label className="label" htmlFor="password">Пароль</label>
+        <label className="label" htmlFor="password">Parol</label>
         <input id="password" name="password" type="password" autoComplete="current-password" required className="input" />
       </div>
       <FormMessage state={state} />
-      <SubmitButton className="btn-primary w-full py-3 text-lg" pendingText="Входим…">
-        Войти
+      <SubmitButton className="btn-primary w-full py-3 text-lg" pendingText="Kirilmoqda…">
+        Kirish
       </SubmitButton>
     </form>
   );

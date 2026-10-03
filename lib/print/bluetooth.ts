@@ -45,7 +45,7 @@ async function findWritableCharacteristic(server: BluetoothRemoteGATTServer) {
     const withoutResponse = characteristics.find((c) => c.properties.writeWithoutResponse);
     if (withResponse || withoutResponse) return (withResponse ?? withoutResponse)!;
   }
-  throw new Error('У принтера не найден канал для печати. Проверьте, что выбран именно принтер.');
+  throw new Error('Printerda chop etish kanali topilmadi. Aynan printer tanlanganini tekshiring.');
 }
 
 async function connect(device: BluetoothDevice): Promise<Connection> {
@@ -60,7 +60,7 @@ async function connect(device: BluetoothDevice): Promise<Connection> {
 
 /** Имя подключённого принтера (если есть) */
 export function connectedPrinterName(): string | null {
-  return connection?.device.gatt?.connected ? connection.device.name ?? 'Принтер' : null;
+  return connection?.device.gatt?.connected ? connection.device.name ?? 'Printer' : null;
 }
 
 /**
@@ -69,7 +69,7 @@ export function connectedPrinterName(): string | null {
  */
 export async function connectPrinter(forceChoose = false): Promise<Connection> {
   if (!isWebBluetoothSupported()) {
-    throw new Error('Этот браузер не поддерживает Bluetooth. Откройте страницу в Chrome на Android.');
+    throw new Error('Bu brauzer Bluetoothni qoʻllab-quvvatlamaydi. Sahifani Androidʼdagi Chromeʼda oching.');
   }
 
   if (!forceChoose && connection) {

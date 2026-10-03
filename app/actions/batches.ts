@@ -18,16 +18,16 @@ export async function createBatch(_prev: ActionState, formData: FormData): Promi
   await requireStaff();
 
   const sheetCount = int(formData, 'ldsp_sheet_count');
-  if (!Number.isInteger(sheetCount) || sheetCount <= 0) return { error: 'Укажите количество листов ЛДСП' };
+  if (!Number.isInteger(sheetCount) || sheetCount <= 0) return { error: 'LDSP listlari sonini kiriting' };
 
   let items: BatchItemInput[];
   try {
     items = JSON.parse(String(formData.get('items') ?? '[]'));
   } catch {
-    return { error: 'Не удалось прочитать список товаров' };
+    return { error: 'Mahsulotlar roʻyxatini oʻqib boʻlmadi' };
   }
   items = items.filter((i) => i.product_id && Number.isInteger(i.quantity) && i.quantity > 0);
-  if (items.length === 0) return { error: 'Отметьте галочками хотя бы один товар и укажите количество' };
+  if (items.length === 0) return { error: 'Kamida bitta mahsulotni belgilang va sonini kiriting' };
 
   const supabase = createClient();
   const { data, error } = await supabase
@@ -73,7 +73,7 @@ export async function completeBatch(batchId: string, input: CompleteBatchInput):
   await requireUser();
 
   if (input.items.some((i) => !Number.isInteger(i.quantity_produced) || i.quantity_produced < 0)) {
-    return { error: 'Количество должно быть целым числом ≥ 0' };
+    return { error: 'Soni butun son ≥ 0 boʻlishi kerak' };
   }
   const remnants = input.remnants
     .map((r) => ({ size: r.size.trim(), color: r.color.trim(), quantity: Math.max(1, Math.trunc(r.quantity) || 1) }))
@@ -96,7 +96,7 @@ export async function completeBatch(batchId: string, input: CompleteBatchInput):
   return {
     ok: true,
     message:
-      `На склад: +${result.produced} шт.` +
-      (result.fulfilled_orders > 0 ? ` Заказов к отгрузке: ${result.fulfilled_orders}.` : ''),
+      `Omborga: +${result.produced} dona.` +
+      (result.fulfilled_orders > 0 ? ` Joʻnatishga tayyor buyurtmalar: ${result.fulfilled_orders}.` : ''),
   };
 }

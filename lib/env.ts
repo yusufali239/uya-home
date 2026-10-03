@@ -11,7 +11,7 @@ export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? '').replace(/\/+$/, '
 export function requireServerEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
-    throw new Error(`Не задана переменная окружения ${name}. См. .env.example`);
+    throw new Error(`${name} muhit oʻzgaruvchisi berilmagan. .env.example ga qarang`);
   }
   return value;
 }

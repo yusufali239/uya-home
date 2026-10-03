@@ -4,7 +4,7 @@ import { MasterTabs } from '@/components/MasterTabs';
 import { RealtimeRefresh } from '@/components/RealtimeRefresh';
 import { isStaff, requireUser } from '@/lib/auth';
 
-export const metadata: Metadata = { title: 'Мастер' };
+export const metadata: Metadata = { title: 'Usta' };
 
 /** Экран мастера — для телефона и Telegram Mini App, всё крупно */
 export default async function MasterLayout({ children }: { children: React.ReactNode }) {
@@ -13,10 +13,10 @@ export default async function MasterLayout({ children }: { children: React.React
   return (
     <div className="mx-auto min-h-screen max-w-lg">
       <header className="sticky top-0 z-20 flex items-center gap-3 bg-brand-700 px-4 py-4 text-white shadow">
-        <Link href="/master" className="text-2xl font-black tracking-tight">UYA Мастер</Link>
+        <Link href="/master" className="text-2xl font-black tracking-tight">UYA Usta</Link>
         <div className="ml-auto truncate text-sm opacity-80">
           {isStaff(profile) ? (
-            <Link href="/admin" className="underline">Админка</Link>
+            <Link href="/admin" className="underline">Boshqaruv</Link>
           ) : (
             profile.full_name
           )}

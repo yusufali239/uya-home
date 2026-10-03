@@ -25,10 +25,10 @@ export async function createOrder(_prev: ActionState, formData: FormData): Promi
   const clientPhone = str(formData, 'client_phone');
   const clientAddress = str(formData, 'client_address');
 
-  if (!source || !SOURCES.includes(source)) return { error: 'Выберите, откуда пришёл заказ' };
-  if (!productId) return { error: 'Выберите товар' };
-  if (!Number.isInteger(quantity) || quantity <= 0) return { error: 'Количество — целое число больше нуля' };
-  if (!clientName || !clientPhone || !clientAddress) return { error: 'Заполните ФИО, телефон и адрес' };
+  if (!source || !SOURCES.includes(source)) return { error: 'Buyurtma qayerdan kelganini tanlang' };
+  if (!productId) return { error: 'Mahsulotni tanlang' };
+  if (!Number.isInteger(quantity) || quantity <= 0) return { error: 'Soni — noldan katta butun son' };
+  if (!clientName || !clientPhone || !clientAddress) return { error: 'F.I.Sh., telefon va manzilni toʻldiring' };
 
   const supabase = createClient();
   const { data, error } = await supabase

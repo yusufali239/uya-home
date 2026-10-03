@@ -20,40 +20,40 @@ export function ProductForm({ action, product }: Props) {
   return (
     <form action={formAction} className="space-y-6">
       <section className="card space-y-4">
-        <h2 className="font-semibold">Основное</h2>
+        <h2 className="font-semibold">Asosiy</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="label" htmlFor="name">Название *</label>
-            <input id="name" name="name" required placeholder="Стол-5" defaultValue={product?.name} className="input" />
+            <label className="label" htmlFor="name">Nomi *</label>
+            <input id="name" name="name" required placeholder="Stol-5" defaultValue={product?.name} className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="sku">Артикул (SKU) *</label>
+            <label className="label" htmlFor="sku">Artikul (SKU) *</label>
             <input id="sku" name="sku" required placeholder="ST-005" defaultValue={product?.sku} className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="color">Цвет</label>
-            <input id="color" name="color" placeholder="Дуб сонома" defaultValue={product?.color ?? ''} className="input" />
+            <label className="label" htmlFor="color">Rangi</label>
+            <input id="color" name="color" placeholder="Dub sonoma" defaultValue={product?.color ?? ''} className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="dimensions">Размеры</label>
+            <label className="label" htmlFor="dimensions">Oʻlchamlari</label>
             <input id="dimensions" name="dimensions" placeholder="1200×600×750" defaultValue={product?.dimensions ?? ''} className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="price">Цена продажи, сом</label>
+            <label className="label" htmlFor="price">Sotish narxi, som</label>
             <input id="price" name="price" inputMode="decimal" defaultValue={product?.price ?? ''} className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="cost_price">Себестоимость, сом</label>
+            <label className="label" htmlFor="cost_price">Tannarxi, som</label>
             <input id="cost_price" name="cost_price" inputMode="decimal" defaultValue={product?.cost_price ?? ''} className="input" />
           </div>
         </div>
       </section>
 
       <section className="card space-y-4">
-        <h2 className="font-semibold">Склад</h2>
+        <h2 className="font-semibold">Ombor</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label className="label" htmlFor="min_quantity">Минимальный остаток *</label>
+            <label className="label" htmlFor="min_quantity">Minimal qoldiq *</label>
             <input
               id="min_quantity"
               name="min_quantity"
@@ -63,26 +63,26 @@ export function ProductForm({ action, product }: Props) {
               defaultValue={product?.min_quantity ?? 5}
               className="input"
             />
-            <p className="mt-1 text-xs text-gray-500">Ниже — сигнал в Telegram и товар попадает в партию</p>
+            <p className="mt-1 text-xs text-gray-500">Bundan kam boʻlsa — Telegramʼga xabar keladi va mahsulot partiyaga tushadi</p>
           </div>
           <div>
-            <label className="label" htmlFor="quantity">{product ? 'Остаток на складе' : 'Начальный остаток'}</label>
+            <label className="label" htmlFor="quantity">{product ? 'Ombordagi qoldiq' : 'Boshlangʻich qoldiq'}</label>
             <input id="quantity" name="quantity" type="number" min={0} defaultValue={quantity} className="input" />
             <input type="hidden" name="original_quantity" value={quantity} />
           </div>
           <div>
-            <label className="label" htmlFor="location">Место хранения</label>
-            <input id="location" name="location" placeholder="Стеллаж А1" defaultValue={location} className="input" />
+            <label className="label" htmlFor="location">Saqlash joyi</label>
+            <input id="location" name="location" placeholder="A1 javon" defaultValue={location} className="input" />
             <input type="hidden" name="original_location" value={location} />
           </div>
         </div>
       </section>
 
       <section className="card space-y-4">
-        <h2 className="font-semibold">Файлы</h2>
+        <h2 className="font-semibold">Fayllar</h2>
         <FileUpload
           name="brand_photo_url"
-          label="Фото товара (для бейджика)"
+          label="Mahsulot rasmi (yorliq uchun)"
           bucket="products"
           folder="photos"
           accept="image/*"
@@ -90,7 +90,7 @@ export function ProductForm({ action, product }: Props) {
         />
         <FileUpload
           name="sketchcut_file_url"
-          label="Карта раскроя SketchCut (PDF)"
+          label="SketchCut kesish chizmasi (PDF)"
           bucket="products"
           folder="sketchcut"
           accept="application/pdf"
@@ -98,7 +98,7 @@ export function ProductForm({ action, product }: Props) {
         />
         <FileUpload
           name="instruction_url"
-          label="Инструкция по сборке"
+          label="Yigʻish yoʻriqnomasi"
           bucket="products"
           folder="instructions"
           accept="application/pdf,image/*"
@@ -108,7 +108,7 @@ export function ProductForm({ action, product }: Props) {
 
       <FormMessage state={state} />
       <SubmitButton className="btn-primary w-full py-3 text-lg sm:w-auto">
-        {product ? 'Сохранить' : 'Создать товар'}
+        {product ? 'Saqlash' : 'Mahsulot yaratish'}
       </SubmitButton>
     </form>
   );

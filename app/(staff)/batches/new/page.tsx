@@ -4,7 +4,7 @@ import { BatchForm, type BatchCandidate } from '@/components/BatchForm';
 import { one } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata: Metadata = { title: 'Новая партия' };
+export const metadata: Metadata = { title: 'Yangi partiya' };
 export const dynamic = 'force-dynamic';
 
 export default async function NewBatchPage() {
@@ -39,8 +39,8 @@ export default async function NewBatchPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
-      <Link href="/batches" className="text-sm text-brand-600 hover:underline">← Партии</Link>
-      <h1 className="text-2xl font-bold">Новая партия раскроя</h1>
+      <Link href="/batches" className="text-sm text-brand-600 hover:underline">← Partiyalar</Link>
+      <h1 className="text-2xl font-bold">Yangi kesish partiyasi</h1>
       <BatchForm candidates={candidates} />
     </div>
   );

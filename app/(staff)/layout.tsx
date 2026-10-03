@@ -21,7 +21,7 @@ export default async function StaffLayout({ children }: { children: React.ReactN
               {profile.full_name} · {ROLE_LABELS[profile.role]}
             </Link>
             <form action={signOut}>
-              <button className="font-medium text-brand-600 hover:underline">Выйти</button>
+              <button className="font-medium text-brand-600 hover:underline">Chiqish</button>
             </form>
           </div>
         </div>

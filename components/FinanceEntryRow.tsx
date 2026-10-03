@@ -52,19 +52,19 @@ export function FinanceEntryRow({ entry, personName, toName, canReview }: Props)
           {entry.status === 'pending' && (
             <>
               <button className="btn-success px-3 py-1.5 text-sm" disabled={pending} onClick={() => run(() => reviewFinanceEntry(entry.id, true))}>
-                ✓ Подтвердить
+                ✓ Tasdiqlash
               </button>
               <button className="btn-secondary px-3 py-1.5 text-sm" disabled={pending} onClick={() => run(() => reviewFinanceEntry(entry.id, false))}>
-                ✗ Отклонить
+                ✗ Rad etish
               </button>
             </>
           )}
           <button
             className="ml-auto text-xs text-gray-400 hover:text-red-600"
             disabled={pending}
-            onClick={() => confirm('Удалить запись?') && run(() => deleteFinanceEntry(entry.id))}
+            onClick={() => confirm('Yozuvni oʻchirasizmi?') && run(() => deleteFinanceEntry(entry.id))}
           >
-            удалить
+            oʻchirish
           </button>
         </div>
       )}

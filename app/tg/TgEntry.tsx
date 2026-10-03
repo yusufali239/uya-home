@@ -50,16 +50,16 @@ export function TgEntry({ next }: { next?: string }) {
 
   switch (state.kind) {
     case 'loading':
-      return <p className="py-8 text-center text-gray-500">Входим…</p>;
+      return <p className="py-8 text-center text-gray-500">Kirilmoqda…</p>;
     case 'linked':
-      return <p className="py-8 text-center text-lg font-semibold text-emerald-700">✅ Telegram привязан. Дальше вход без пароля.</p>;
+      return <p className="py-8 text-center text-lg font-semibold text-emerald-700">✅ Telegram bogʻlandi. Endi parolsiz kirasiz.</p>;
     case 'error':
       return <p className="rounded-xl bg-red-50 p-3 text-center text-red-700">{state.message}</p>;
     case 'outside':
       return (
         <div className="space-y-4 text-center">
-          <p className="text-gray-600">Эта страница открывается из Telegram-бота кнопкой «UYA HOME».</p>
-          <Link href="/login" className="btn-primary w-full py-3">Войти на сайте</Link>
+          <p className="text-gray-600">Bu sahifa Telegram-botdagi «UYA HOME» tugmasi orqali ochiladi.</p>
+          <Link href="/login" className="btn-primary w-full py-3">Saytga kirish</Link>
         </div>
       );
     case 'login':
@@ -72,25 +72,25 @@ export function TgEntry({ next }: { next?: string }) {
             startTransition(async () => {
               const result = await tgLogin(state.initData, String(form.get('email') ?? ''), String(form.get('password') ?? ''));
               if (result.status === 'ok') go(result);
-              else setState({ ...state, error: result.status === 'error' ? result.message : 'Не удалось войти' });
+              else setState({ ...state, error: result.status === 'error' ? result.message : 'Kirib boʻlmadi' });
             });
           }}
         >
           <p className="rounded-xl bg-brand-50 p-3 text-sm text-brand-900">
-            {state.name ? `${state.name}, войдите` : 'Войдите'} один раз своим email и паролем — Telegram запомнится,
-            и дальше приложение будет открываться сразу.
+            {state.name ? `${state.name}, bir marta` : 'Bir marta'} email va parolingiz bilan kiring — Telegram eslab qolinadi
+            va keyingi safar ilova darhol ochiladi.
           </p>
           <div>
             <label className="label" htmlFor="email">Email</label>
             <input id="email" name="email" type="email" autoComplete="email" required className="input" />
           </div>
           <div>
-            <label className="label" htmlFor="password">Пароль</label>
+            <label className="label" htmlFor="password">Parol</label>
             <input id="password" name="password" type="password" autoComplete="current-password" required className="input" />
           </div>
           {state.error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-red-700">{state.error}</p>}
           <button type="submit" className="btn-primary w-full py-3 text-lg" disabled={pending}>
-            {pending ? 'Входим…' : 'Войти'}
+            {pending ? 'Kirilmoqda…' : 'Kirish'}
           </button>
         </form>
       );

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BatchActions } from '@/components/BatchActions';
-import { BATCH_STATUS, plural } from '@/lib/format';
+import { BATCH_STATUS } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 import type { CutBatch, CutBatchItem } from '@/lib/types';
 
@@ -23,15 +23,15 @@ export default async function MasterBatchPage({ params }: { params: { id: string
 
   return (
     <>
-      <Link href="/master" className="inline-block py-2 text-lg text-brand-600">← Все задачи</Link>
+      <Link href="/master" className="inline-block py-2 text-lg text-brand-600">← Barcha vazifalar</Link>
 
       <div className="card p-5">
         <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-black">Партия №{b.batch_number}</h1>
+          <h1 className="text-3xl font-black">№{b.batch_number} partiya</h1>
           <span className={`badge ml-auto text-sm ${BATCH_STATUS[b.status].className}`}>{BATCH_STATUS[b.status].label}</span>
         </div>
         <div className="mt-2 text-xl">
-          {b.ldsp_sheet_count} {plural(b.ldsp_sheet_count, ['лист', 'листа', 'листов'])} ЛДСП
+          {b.ldsp_sheet_count} list LDSP
         </div>
         {b.notes && <p className="mt-3 rounded-xl bg-amber-50 p-3 text-amber-900">💬 {b.notes}</p>}
 
@@ -42,7 +42,7 @@ export default async function MasterBatchPage({ params }: { params: { id: string
                 {i.products?.name}
                 {i.products?.color && <span className="text-sm text-gray-500"> · {i.products.color}</span>}
               </span>
-              <b>{i.quantity_produced ?? i.quantity_to_produce} шт.</b>
+              <b>{i.quantity_produced ?? i.quantity_to_produce} dona</b>
             </li>
           ))}
         </ul>
@@ -50,10 +50,10 @@ export default async function MasterBatchPage({ params }: { params: { id: string
 
       {b.sketchcut_file_url ? (
         <a href={`${b.sketchcut_file_url}?download=`} className="btn-secondary btn-xl" target="_blank" rel="noreferrer">
-          📄 Скачать раскрой (PDF)
+          📄 Kesish chizmasi (PDF)
         </a>
       ) : (
-        <p className="text-center text-gray-500">PDF раскроя не прикреплён</p>
+        <p className="text-center text-gray-500">Kesish chizmasi biriktirilmagan</p>
       )}
 
       <BatchActions

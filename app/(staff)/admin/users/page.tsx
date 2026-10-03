@@ -6,7 +6,7 @@ import { ROLE_LABELS } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 import type { Profile, UserRole } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Сотрудники' };
+export const metadata: Metadata = { title: 'Xodimlar' };
 export const dynamic = 'force-dynamic';
 
 /** Только для директора: сотрудники и их роли */
@@ -18,14 +18,14 @@ export default async function UsersPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <h1 className="text-2xl font-bold">Сотрудники</h1>
+      <h1 className="text-2xl font-bold">Xodimlar</h1>
 
       <div className="card divide-y p-0">
         {profiles.map((p) => (
           <div key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
             <div className="flex-1 font-medium">{p.full_name}</div>
             {p.id === me.id ? (
-              <span className="text-sm text-gray-500">{ROLE_LABELS[p.role]} (вы)</span>
+              <span className="text-sm text-gray-500">{ROLE_LABELS[p.role]} (siz)</span>
             ) : (
               <form action={changeRole.bind(null, p.id)} className="flex gap-2">
                 <select name="role" defaultValue={p.role} className="input py-1.5 text-sm">

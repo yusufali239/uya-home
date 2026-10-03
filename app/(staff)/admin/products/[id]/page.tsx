@@ -24,7 +24,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
-      <Link href="/admin" className="text-sm text-brand-600 hover:underline">← Склад</Link>
+      <Link href="/admin" className="text-sm text-brand-600 hover:underline">← Ombor</Link>
       <div className="flex items-center gap-3">
         <h1 className="text-2xl font-bold">{product.name}</h1>
         <StockStatus quantity={qty} min={product.min_quantity} />

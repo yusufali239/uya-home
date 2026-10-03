@@ -5,15 +5,15 @@ import { ORDER_STATUS, SOURCE_LABELS, formatDateTime, one } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 import type { Order, OrderStatus } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Заказы' };
+export const metadata: Metadata = { title: 'Buyurtmalar' };
 export const dynamic = 'force-dynamic';
 
 const FILTERS: { key: string; label: string; statuses: OrderStatus[] | null }[] = [
-  { key: 'active', label: 'Активные', statuses: ['new', 'confirmed', 'ready_to_ship', 'waiting_production'] },
-  { key: 'ready', label: 'К отгрузке', statuses: ['ready_to_ship'] },
-  { key: 'waiting', label: 'Ждут производства', statuses: ['waiting_production'] },
-  { key: 'shipped', label: 'Отгружены', statuses: ['shipped'] },
-  { key: 'all', label: 'Все', statuses: null },
+  { key: 'active', label: 'Faol', statuses: ['new', 'confirmed', 'ready_to_ship', 'waiting_production'] },
+  { key: 'ready', label: 'Joʻnatishga tayyor', statuses: ['ready_to_ship'] },
+  { key: 'waiting', label: 'Ishlab chiqarishni kutmoqda', statuses: ['waiting_production'] },
+  { key: 'shipped', label: 'Joʻnatilgan', statuses: ['shipped'] },
+  { key: 'all', label: 'Hammasi', statuses: null },
 ];
 
 type OrderRow = Order & { products: { name: string; sku: string } | null };
@@ -42,8 +42,8 @@ export default async function OrdersPage({
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-2xl font-bold">Заказы</h1>
-        <Link href="/admin/orders/new" className="btn-primary ml-auto">+ Новый заказ</Link>
+        <h1 className="text-2xl font-bold">Buyurtmalar</h1>
+        <Link href="/admin/orders/new" className="btn-primary ml-auto">+ Yangi buyurtma</Link>
       </div>
 
       {searchParams.created && createdStatus && (
@@ -52,10 +52,10 @@ export default async function OrdersPage({
             createdStatus === 'ready_to_ship' ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'
           }`}
         >
-          Заказ №{searchParams.created} создан.{' '}
+          №{searchParams.created} buyurtma yaratildi.{' '}
           {createdStatus === 'ready_to_ship'
-            ? 'Товар есть на складе — мастер получил задание на отправку.'
-            : 'Товара не хватает — заказ ждёт производства. Создайте партию раскроя.'}
+            ? 'Mahsulot omborda bor — ustaga joʻnatish vazifasi yuborildi.'
+            : 'Mahsulot yetarli emas — buyurtma ishlab chiqarishni kutmoqda. Kesish partiyasini yarating.'}
         </div>
       )}
 
@@ -74,17 +74,17 @@ export default async function OrdersPage({
       </div>
 
       {orders.length === 0 ? (
-        <div className="card py-12 text-center text-gray-500">Заказов нет</div>
+        <div className="card py-12 text-center text-gray-500">Buyurtmalar yoʻq</div>
       ) : (
         <div className="card overflow-x-auto p-0">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="border-b bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
                 <th className="px-4 py-3">№</th>
-                <th className="px-4 py-3">Товар</th>
-                <th className="px-4 py-3">Клиент</th>
-                <th className="px-4 py-3">Источник</th>
-                <th className="px-4 py-3">Статус</th>
+                <th className="px-4 py-3">Mahsulot</th>
+                <th className="px-4 py-3">Mijoz</th>
+                <th className="px-4 py-3">Manba</th>
+                <th className="px-4 py-3">Holat</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -110,7 +110,7 @@ export default async function OrdersPage({
                   </td>
                   <td className="space-y-1 px-4 py-3 text-right">
                     <Link href={`/print/badge/${o.id}`} target="_blank" className="block text-sm text-brand-600 hover:underline">
-                      Бейджик
+                      Yorliq
                     </Link>
                     {o.status === 'ready_to_ship' && <ShipButton orderId={o.id} className="btn-success px-3 py-1.5 text-sm" />}
                   </td>

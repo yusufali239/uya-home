@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BATCH_STATUS, formatDateTime, plural } from '@/lib/format';
+import { BATCH_STATUS, formatDateTime } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 import type { CutBatch } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Партии раскроя' };
+export const metadata: Metadata = { title: 'Kesish partiyalari' };
 export const dynamic = 'force-dynamic';
 
 type BatchRow = CutBatch & { cut_batch_items: { quantity_to_produce: number; products: { name: string } | null }[] };
@@ -23,27 +23,27 @@ export default async function BatchesPage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-bold">Партии раскроя</h1>
-        <Link href="/batches/new" className="btn-primary ml-auto">Создать партию</Link>
+        <h1 className="text-2xl font-bold">Kesish partiyalari</h1>
+        <Link href="/batches/new" className="btn-primary ml-auto">Partiya yaratish</Link>
       </div>
 
       {batches.length === 0 ? (
-        <div className="card py-12 text-center text-gray-500">Партий пока нет</div>
+        <div className="card py-12 text-center text-gray-500">Hozircha partiyalar yoʻq</div>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {batches.map((b) => (
             <Link key={b.id} href={`/batches/${b.id}`} className="card block transition hover:ring-brand-500/40">
               <div className="flex items-center gap-2">
-                <div className="text-lg font-bold">Партия №{b.batch_number}</div>
+                <div className="text-lg font-bold">№{b.batch_number} partiya</div>
                 <span className={`badge ${BATCH_STATUS[b.status].className}`}>{BATCH_STATUS[b.status].label}</span>
                 <div className="ml-auto text-xs text-gray-500">{formatDateTime(b.created_at)}</div>
               </div>
               <div className="mt-1 text-sm text-gray-600">
-                {b.ldsp_sheet_count} {plural(b.ldsp_sheet_count, ['лист', 'листа', 'листов'])} ЛДСП
+                {b.ldsp_sheet_count} list LDSP
               </div>
               <ul className="mt-2 text-sm">
                 {b.cut_batch_items.map((i, idx) => (
-                  <li key={idx}>• {i.products?.name} — {i.quantity_to_produce} шт.</li>
+                  <li key={idx}>• {i.products?.name} — {i.quantity_to_produce} dona</li>
                 ))}
               </ul>
             </Link>

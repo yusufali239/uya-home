@@ -30,7 +30,7 @@ export default async function MasterOrderPage({ params }: { params: { id: string
 
   return (
     <>
-      <Link href="/master" className="inline-block py-2 text-lg text-brand-600">← Все задачи</Link>
+      <Link href="/master" className="inline-block py-2 text-lg text-brand-600">← Barcha vazifalar</Link>
 
       <div className="card space-y-3 p-5">
         <div className="flex items-center gap-2">
@@ -60,18 +60,18 @@ export default async function MasterOrderPage({ params }: { params: { id: string
       </div>
 
       <Link href={`/print/badge/${order.id}`} className="btn-primary btn-xl">
-        🖨 Напечатать бейджик клиента
+        🖨 Mijoz yorligʻini chop etish
       </Link>
 
       {order.products?.instruction_url && (
         <a href={order.products.instruction_url} target="_blank" rel="noreferrer" className="btn-secondary btn-xl">
-          📘 Инструкция по сборке
+          📘 Yigʻish yoʻriqnomasi
         </a>
       )}
 
       {order.status === 'ready_to_ship' && (
         <div>
-          <ShipButton orderId={order.id} className="btn-success btn-xl" label="🚚 Отправлен" redirectTo="/master" />
+          <ShipButton orderId={order.id} className="btn-success btn-xl" label="🚚 Joʻnatildi" redirectTo="/master" />
         </div>
       )}
     </>

@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const TABS = [
-  { href: '/master', label: 'Задачи', icon: '📋', exact: true },
-  { href: '/master/supplies', label: 'Мелочи', icon: '🔩' },
-  { href: '/master/finance', label: 'Деньги', icon: '💰' },
-  { href: '/master/account', label: 'Профиль', icon: '👤' },
+  { href: '/master', label: 'Vazifalar', icon: '📋', exact: true },
+  { href: '/master/supplies', label: 'Materiallar', icon: '🔩' },
+  { href: '/master/remnants', label: 'Qoldiqlar', icon: '🪵' },
+  { href: '/master/finance', label: 'Pul', icon: '💰' },
+  { href: '/master/account', label: 'Profil', icon: '👤' },
 ];
 
 /** Нижняя панель вкладок мастера — как в мобильном приложении */
@@ -15,7 +16,7 @@ export function MasterTabs() {
   const pathname = usePathname();
   return (
     <nav className="fixed inset-x-0 bottom-0 z-30 border-t bg-white pb-[env(safe-area-inset-bottom)]">
-      <div className="mx-auto grid max-w-lg grid-cols-4">
+      <div className="mx-auto grid max-w-lg grid-cols-5">
         {TABS.map((tab) => {
           // «Задачи» активны и внутри партии/заказа
           const active = tab.exact

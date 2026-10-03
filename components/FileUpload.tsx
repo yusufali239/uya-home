@@ -62,7 +62,7 @@ export function FileUpload({ name, label, bucket, folder, accept, defaultUrl, re
       <input type="hidden" name={name} value={url} />
       <div className="flex flex-wrap items-center gap-3">
         <label className="btn-secondary cursor-pointer text-sm">
-          {status === 'uploading' ? 'Загрузка…' : url ? 'Заменить файл' : 'Выбрать файл'}
+          {status === 'uploading' ? 'Yuklanmoqda…' : url ? 'Faylni almashtirish' : 'Fayl tanlash'}
           <input type="file" accept={accept} className="hidden" onChange={handleChange} disabled={status === 'uploading'} />
         </label>
         {url && isImage && (
@@ -71,16 +71,16 @@ export function FileUpload({ name, label, bucket, folder, accept, defaultUrl, re
         )}
         {url && !isImage && (
           <a href={url} target="_blank" rel="noreferrer" className="text-sm font-medium text-brand-600 underline">
-            Открыть файл ✓
+            Faylni ochish ✓
           </a>
         )}
         {url && (
           <button type="button" className="text-sm text-gray-500 hover:text-red-600" onClick={() => setUrl('')}>
-            Убрать
+            Olib tashlash
           </button>
         )}
       </div>
-      {status === 'error' && <p className="mt-1 text-sm text-red-600">Ошибка загрузки: {error}</p>}
+      {status === 'error' && <p className="mt-1 text-sm text-red-600">Yuklashda xato: {error}</p>}
     </div>
   );
 }

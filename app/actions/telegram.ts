@@ -22,7 +22,7 @@ const homeFor = (role: UserRole) => (role === 'master' ? '/master' : '/admin');
  */
 export async function tgEnter(initData: string): Promise<TgEnterResult> {
   const tgUser = verifyInitData(initData, requireServerEnv('TELEGRAM_BOT_TOKEN'));
-  if (!tgUser) return { status: 'error', message: 'Не удалось проверить данные Telegram. Закройте и откройте приложение снова.' };
+  if (!tgUser) return { status: 'error', message: 'Telegram maʼlumotlarini tekshirib boʻlmadi. Ilovani yopib, qayta oching.' };
 
   const admin = createAdminClient();
   const supabase = createClient();
@@ -45,7 +45,7 @@ export async function tgEnter(initData: string): Promise<TgEnterResult> {
   if (linked) {
     // Сессия без пароля: одноразовый токен magic link, сразу подтверждаем на сервере
     const { data: authUser, error: userError } = await admin.auth.admin.getUserById(linked.id);
-    if (userError || !authUser.user.email) return { status: 'error', message: 'Сотрудник не найден' };
+    if (userError || !authUser.user.email) return { status: 'error', message: 'Xodim topilmadi' };
 
     const { data: link, error: linkError } = await admin.auth.admin.generateLink({
       type: 'magiclink',
@@ -90,12 +90,12 @@ async function linkTelegram(profileId: string, telegramId: number): Promise<TgEn
  */
 export async function tgLogin(initData: string, email: string, password: string): Promise<TgEnterResult> {
   const tgUser = verifyInitData(initData, requireServerEnv('TELEGRAM_BOT_TOKEN'));
-  if (!tgUser) return { status: 'error', message: 'Не удалось проверить данные Telegram. Закройте и откройте приложение снова.' };
-  if (!email.trim() || !password) return { status: 'error', message: 'Введите email и пароль' };
+  if (!tgUser) return { status: 'error', message: 'Telegram maʼlumotlarini tekshirib boʻlmadi. Ilovani yopib, qayta oching.' };
+  if (!email.trim() || !password) return { status: 'error', message: 'Email va parolni kiriting' };
 
   const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-  if (error || !data.user) return { status: 'error', message: 'Неверный email или пароль' };
+  if (error || !data.user) return { status: 'error', message: 'Email yoki parol notoʻgʻri' };
 
   return linkTelegram(data.user.id, tgUser.id);
 }

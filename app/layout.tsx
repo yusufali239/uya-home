@@ -5,9 +5,9 @@ import { TelegramShell } from '@/components/TelegramShell';
 
 export const metadata: Metadata = {
   title: { default: 'UYA HOME', template: '%s · UYA HOME' },
-  description: 'Склад готовой мебели, заказы и партии раскроя ЛДСП',
+  description: 'Tayyor mebel ombori, buyurtmalar va LDSP kesish partiyalari',
   applicationName: 'UYA HOME',
-  appleWebApp: { capable: true, title: 'UYA Мастер', statusBarStyle: 'default' },
+  appleWebApp: { capable: true, title: 'UYA Usta', statusBarStyle: 'default' },
   icons: { icon: '/icons/192', apple: '/icons/192' },
 };
 
@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="uz">
       <body className="min-h-screen">
         {children}
         <ServiceWorkerRegister />

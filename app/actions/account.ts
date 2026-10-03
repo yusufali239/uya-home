@@ -13,23 +13,23 @@ export async function changePassword(_prev: ActionState, formData: FormData): Pr
   const next = String(formData.get('new_password') ?? '');
   const repeat = String(formData.get('repeat_password') ?? '');
 
-  if (next.length < 8) return { error: 'Новый пароль — минимум 8 символов' };
-  if (next !== repeat) return { error: 'Пароли не совпадают' };
-  if (next === current) return { error: 'Новый пароль совпадает со старым' };
+  if (next.length < 8) return { error: 'Yangi parol — kamida 8 ta belgi' };
+  if (next !== repeat) return { error: 'Parollar mos kelmadi' };
+  if (next === current) return { error: 'Yangi parol eskisi bilan bir xil' };
 
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user?.email || user.id !== profile.id) return { error: 'Нужно войти заново' };
+  if (!user?.email || user.id !== profile.id) return { error: 'Qaytadan kiring' };
 
   // Проверяем текущий пароль, чтобы чужой человек с открытым телефоном не сменил его
   const { error: checkError } = await supabase.auth.signInWithPassword({ email: user.email, password: current });
-  if (checkError) return { error: 'Текущий пароль неверный' };
+  if (checkError) return { error: 'Joriy parol notoʻgʻri' };
 
   const { error } = await supabase.auth.updateUser({ password: next });
   if (error) return { error: error.message };
-  return { ok: true, message: 'Пароль изменён' };
+  return { ok: true, message: 'Parol oʻzgartirildi' };
 }
 
 /** Отвязать Telegram: вход в Mini App снова потребует пароль */

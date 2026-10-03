@@ -18,9 +18,9 @@ export async function createUser(_prev: ActionState, formData: FormData): Promis
   const fullName = str(formData, 'full_name');
   const role = str(formData, 'role') as UserRole | null;
 
-  if (!email || !password || !fullName) return { error: 'Заполните имя, email и пароль' };
-  if (password.length < 6) return { error: 'Пароль — минимум 6 символов' };
-  if (!role || !ROLES.includes(role)) return { error: 'Выберите роль' };
+  if (!email || !password || !fullName) return { error: 'Ism, email va parolni toʻldiring' };
+  if (password.length < 6) return { error: 'Parol — kamida 6 ta belgi' };
+  if (!role || !ROLES.includes(role)) return { error: 'Lavozimni tanlang' };
 
   const admin = createAdminClient();
   const { data, error } = await admin.auth.admin.createUser({
@@ -36,7 +36,7 @@ export async function createUser(_prev: ActionState, formData: FormData): Promis
   if (roleError) return { error: roleError.message };
 
   revalidatePath('/admin/users');
-  return { ok: true, message: `Сотрудник ${fullName} создан. Логин: ${email}` };
+  return { ok: true, message: `${fullName} xodim yaratildi. Login: ${email}` };
 }
 
 /** Смена роли сотрудника */

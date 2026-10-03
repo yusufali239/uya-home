@@ -11,9 +11,9 @@ import type { ActionState, FinanceKind, Profile } from '@/lib/types';
 type Person = Pick<Profile, 'id' | 'full_name' | 'role'>;
 
 const KIND_BUTTONS: { kind: FinanceKind; label: string; active: string }[] = [
-  { kind: 'expense', label: '− Расход', active: 'bg-red-600 text-white ring-red-600' },
-  { kind: 'income', label: '+ Приход', active: 'bg-emerald-600 text-white ring-emerald-600' },
-  { kind: 'transfer', label: '→ Передал', active: 'bg-blue-600 text-white ring-blue-600' },
+  { kind: 'expense', label: '− Chiqim', active: 'bg-red-600 text-white ring-red-600' },
+  { kind: 'income', label: '+ Kirim', active: 'bg-emerald-600 text-white ring-emerald-600' },
+  { kind: 'transfer', label: '→ Topshirdim', active: 'bg-blue-600 text-white ring-blue-600' },
 ];
 
 interface Props {
@@ -68,7 +68,7 @@ export function FinanceEntryForm({ people, selfId, isStaff }: Props) {
       {isStaff && (
         <div>
           <label className="label" htmlFor="person_id">
-            {kind === 'income' ? 'Кто получил деньги' : kind === 'expense' ? 'Кто заплатил' : 'Кто передал'}
+            {kind === 'income' ? 'Pulni kim oldi' : kind === 'expense' ? 'Kim toʻladi' : 'Kim topshirdi'}
           </label>
           <select id="person_id" name="person_id" className="input" value={personId} onChange={(e) => setPersonId(e.target.value)}>
             {people.map((p) => (
@@ -82,7 +82,7 @@ export function FinanceEntryForm({ people, selfId, isStaff }: Props) {
 
       {kind === 'transfer' && (
         <div>
-          <label className="label" htmlFor="to_person_id">Кому передал</label>
+          <label className="label" htmlFor="to_person_id">Kimga topshirildi</label>
           <select id="to_person_id" name="to_person_id" required className="input" defaultValue={recipients[0]?.id}>
             {recipients.map((p) => (
               <option key={p.id} value={p.id}>
@@ -94,7 +94,7 @@ export function FinanceEntryForm({ people, selfId, isStaff }: Props) {
       )}
 
       <div>
-        <label className="label" htmlFor="amount">Сумма, сом</label>
+        <label className="label" htmlFor="amount">Summa, som</label>
         <input
           id="amount"
           name="amount"
@@ -106,7 +106,7 @@ export function FinanceEntryForm({ people, selfId, isStaff }: Props) {
       </div>
 
       <div>
-        <label className="label" htmlFor="category">{kind === 'transfer' ? 'Причина' : 'Статья'}</label>
+        <label className="label" htmlFor="category">{kind === 'transfer' ? 'Sabab' : 'Modda'}</label>
         <div className="mb-2 flex flex-wrap gap-1.5">
           {FINANCE_CATEGORIES[kind].map((c) => (
             <button
@@ -119,27 +119,27 @@ export function FinanceEntryForm({ people, selfId, isStaff }: Props) {
             </button>
           ))}
         </div>
-        <input id="category" name="category" value={category} onChange={(e) => setCategory(e.target.value)} className="input" placeholder="или впишите свою" />
+        <input id="category" name="category" value={category} onChange={(e) => setCategory(e.target.value)} className="input" placeholder="yoki oʻzingiz yozing" />
       </div>
 
       <div>
-        <label className="label" htmlFor="description">Что именно</label>
+        <label className="label" htmlFor="description">Aniq nima</label>
         <input
           id="description"
           name="description"
           className="input"
-          placeholder={kind === 'expense' ? 'Купил свёрла и клей для мастерской' : kind === 'income' ? 'Оплата заказа UYA-012 наличными' : ''}
+          placeholder={kind === 'expense' ? 'Ustaxona uchun parma va yelim oldim' : kind === 'income' ? 'UYA-012 buyurtma uchun naqd toʻlov' : ''}
         />
       </div>
 
       <div>
-        <label className="label" htmlFor="entry_date">Дата</label>
+        <label className="label" htmlFor="entry_date">Sana</label>
         <input id="entry_date" name="entry_date" type="date" defaultValue={today} max={today} className="input" />
       </div>
 
       <FormMessage state={state} />
-      <SubmitButton className="btn-primary w-full py-3 text-lg">Записать</SubmitButton>
-      {!isStaff && <p className="text-center text-xs text-gray-500">Запись увидит директор и подтвердит</p>}
+      <SubmitButton className="btn-primary w-full py-3 text-lg">Yozish</SubmitButton>
+      {!isStaff && <p className="text-center text-xs text-gray-500">Yozuvni direktor koʻrib tasdiqlaydi</p>}
     </form>
   );
 }

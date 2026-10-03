@@ -8,7 +8,7 @@ import { FINANCE_KIND, ROLE_LABELS, formatMoney } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
 import type { FinanceEntry, FinanceKind, Profile } from '@/lib/types';
 
-export const metadata: Metadata = { title: 'Бухгалтерия' };
+export const metadata: Metadata = { title: 'Buxgalteriya' };
 export const dynamic = 'force-dynamic';
 
 type Person = Pick<Profile, 'id' | 'full_name' | 'role'>;
@@ -52,21 +52,21 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-bold">Бухгалтерия</h1>
+      <h1 className="text-2xl font-bold">Buxgalteriya</h1>
 
       {/* Сводка */}
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="card">
-          <div className="text-sm text-gray-500">Деньги компании</div>
+          <div className="text-sm text-gray-500">Kompaniya puli</div>
           <div className={`text-3xl font-black ${companyTotal < 0 ? 'text-red-600' : ''}`}>{formatMoney(companyTotal)}</div>
-          <div className="mt-1 text-xs text-gray-500">приход {formatMoney(totalIncome)} − расход {formatMoney(totalExpense)}</div>
+          <div className="mt-1 text-xs text-gray-500">kirim {formatMoney(totalIncome)} − chiqim {formatMoney(totalExpense)}</div>
         </div>
         <div className="card">
-          <div className="text-sm text-gray-500">Приход за месяц</div>
+          <div className="text-sm text-gray-500">Oy davomida kirim</div>
           <div className="text-2xl font-bold text-emerald-700">+ {formatMoney(monthIncome)}</div>
         </div>
         <div className="card">
-          <div className="text-sm text-gray-500">Расход за месяц</div>
+          <div className="text-sm text-gray-500">Oy davomida chiqim</div>
           <div className="text-2xl font-bold text-red-600">− {formatMoney(monthExpense)}</div>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
       {pendingEntries.length > 0 && (
         <div className="card p-0 ring-2 ring-amber-300">
           <h2 className="border-b bg-amber-50 px-4 py-3 font-semibold text-amber-900">
-            Ждут подтверждения: {pendingEntries.length}
+            Tasdiq kutmoqda: {pendingEntries.length}
           </h2>
           <ul className="divide-y">
             {pendingEntries.map((e) => (
@@ -93,18 +93,18 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
 
       {/* У кого сколько */}
       <div className="card overflow-x-auto p-0">
-        <h2 className="border-b px-4 py-3 font-semibold">По сотрудникам</h2>
+        <h2 className="border-b px-4 py-3 font-semibold">Xodimlar boʻyicha</h2>
         {balances.length === 0 ? (
-          <p className="px-4 py-6 text-center text-gray-500">Подтверждённых записей пока нет</p>
+          <p className="px-4 py-6 text-center text-gray-500">Tasdiqlangan yozuvlar hozircha yoʻq</p>
         ) : (
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead className="bg-gray-50 text-xs uppercase text-gray-500">
               <tr>
-                <th className="px-4 py-2">Сотрудник</th>
-                <th className="px-4 py-2 text-right">Приход</th>
-                <th className="px-4 py-2 text-right">Расход</th>
-                <th className="px-4 py-2 text-right">Передал / получил</th>
-                <th className="px-4 py-2 text-right">На руках</th>
+                <th className="px-4 py-2">Xodim</th>
+                <th className="px-4 py-2 text-right">Kirim</th>
+                <th className="px-4 py-2 text-right">Chiqim</th>
+                <th className="px-4 py-2 text-right">Berdi / oldi</th>
+                <th className="px-4 py-2 text-right">Qoʻlida</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -123,7 +123,7 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
                   </td>
                   <td className={`px-4 py-2 text-right text-base font-bold ${b.onHands < 0 ? 'text-red-600' : ''}`}>
                     {formatMoney(b.onHands)}
-                    {b.onHands < 0 && <div className="text-xs font-normal">компания должна</div>}
+                    {b.onHands < 0 && <div className="text-xs font-normal">kompaniya qarzdor</div>}
                   </td>
                 </tr>
               ))}
@@ -131,19 +131,19 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
           </table>
         )}
         <p className="border-t px-4 py-2 text-xs text-gray-500">
-          «На руках» = приход − расход − передал + получил. Плюс — у сотрудника деньги компании, минус — он потратил свои и компания ему должна.
+          «Qoʻlida» = kirim − chiqim − berdi + oldi. Musbat — xodimda kompaniya puli bor, manfiy — xodim oʻz pulini sarflagan va kompaniya unga qarzdor.
         </p>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[22rem_1fr]">
         <div>
-          <h2 className="mb-2 font-semibold">Новая запись</h2>
+          <h2 className="mb-2 font-semibold">Yangi yozuv</h2>
           <FinanceEntryForm people={people} selfId={me.id} isStaff />
         </div>
 
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="mr-auto font-semibold">Журнал</h2>
+            <h2 className="mr-auto font-semibold">Jurnal</h2>
             {(['income', 'expense', 'transfer'] as FinanceKind[]).map((k) => (
               <Link
                 key={k}
@@ -155,13 +155,13 @@ export default async function FinancePage({ searchParams }: { searchParams: { pe
             ))}
             {(searchParams.person || kindFilter) && (
               <Link href="/admin/finance" className="text-sm text-gray-500 underline">
-                сбросить{searchParams.person ? ` (${nameOf.get(searchParams.person)})` : ''}
+                tozalash{searchParams.person ? ` (${nameOf.get(searchParams.person)})` : ''}
               </Link>
             )}
           </div>
           <div className="card p-0">
             {filtered.length === 0 ? (
-              <p className="px-4 py-8 text-center text-gray-500">Записей нет</p>
+              <p className="px-4 py-8 text-center text-gray-500">Yozuvlar yoʻq</p>
             ) : (
               <ul className="divide-y">
                 {filtered.map((e) => (

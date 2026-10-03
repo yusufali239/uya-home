@@ -24,15 +24,15 @@ export async function createSupply(_prev: ActionState, formData: FormData): Prom
   const name = str(formData, 'name');
   const quantity = num(formData, 'quantity');
   const minQuantity = num(formData, 'min_quantity');
-  if (!name) return { error: 'Укажите название' };
+  if (!name) return { error: 'Nomini kiriting' };
   if (!Number.isFinite(quantity) || quantity < 0 || !Number.isFinite(minQuantity) || minQuantity < 0) {
-    return { error: 'Количество — число ≥ 0' };
+    return { error: 'Soni — son ≥ 0' };
   }
 
   const supabase = createClient();
   const { error } = await supabase.rpc('create_supply', {
     p_name: name,
-    p_unit: str(formData, 'unit') ?? 'шт',
+    p_unit: str(formData, 'unit') ?? 'dona',
     p_quantity: quantity,
     p_min_quantity: minQuantity,
     p_location: str(formData, 'location'),
@@ -40,7 +40,7 @@ export async function createSupply(_prev: ActionState, formData: FormData): Prom
   if (error) return { error: dbError(error) };
 
   refresh();
-  return { ok: true, message: `«${name}» добавлено` };
+  return { ok: true, message: `«${name}» qoʻshildi` };
 }
 
 /** Приход/расход (delta) или пересчёт (set) */
@@ -49,8 +49,8 @@ export async function adjustSupply(
   change: { delta?: number; set?: number; note?: string },
 ): Promise<ActionState> {
   await requireUser();
-  if (change.delta !== undefined && !Number.isFinite(change.delta)) return { error: 'Неверное количество' };
-  if (change.set !== undefined && (!Number.isFinite(change.set) || change.set < 0)) return { error: 'Неверное количество' };
+  if (change.delta !== undefined && !Number.isFinite(change.delta)) return { error: 'Soni notoʻgʻri' };
+  if (change.set !== undefined && (!Number.isFinite(change.set) || change.set < 0)) return { error: 'Soni notoʻgʻri' };
 
   const supabase = createClient();
   const { error } = await supabase.rpc('adjust_supply', {
@@ -71,21 +71,21 @@ export async function updateSupply(supplyId: string, _prev: ActionState, formDat
   await requireUser();
   const name = str(formData, 'name');
   const minQuantity = num(formData, 'min_quantity');
-  if (!name) return { error: 'Укажите название' };
-  if (!Number.isFinite(minQuantity) || minQuantity < 0) return { error: 'Минимум — число ≥ 0' };
+  if (!name) return { error: 'Nomini kiriting' };
+  if (!Number.isFinite(minQuantity) || minQuantity < 0) return { error: 'Minimum — son ≥ 0' };
 
   const supabase = createClient();
   const { error } = await supabase.rpc('update_supply', {
     p_supply_id: supplyId,
     p_name: name,
-    p_unit: str(formData, 'unit') ?? 'шт',
+    p_unit: str(formData, 'unit') ?? 'dona',
     p_min_quantity: minQuantity,
     p_location: str(formData, 'location'),
   });
   if (error) return { error: dbError(error) };
 
   refresh();
-  return { ok: true, message: 'Сохранено' };
+  return { ok: true, message: 'Saqlandi' };
 }
 
 /** Удалить позицию (директор/менеджер) */

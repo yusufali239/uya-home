@@ -90,7 +90,7 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
       try {
         setStatus({ kind: 'connecting' });
         const { device } = await connectPrinter(chooseNew);
-        setPrinterName(device.name ?? 'Принтер');
+        setPrinterName(device.name ?? 'Printer');
 
         setStatus({ kind: 'printing', progress: 0 });
         const job = buildPrintJob(canvas, settings);
@@ -104,7 +104,7 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
           return;
         }
         setPrinterName(connectedPrinterName());
-        setStatus({ kind: 'error', message: e?.message || 'Не удалось напечатать' });
+        setStatus({ kind: 'error', message: e?.message || 'Chop etib boʻlmadi' });
       }
     },
     [canvas, settings],
@@ -134,9 +134,9 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
       `}</style>
 
       <div className="no-print sticky top-0 z-10 flex items-center gap-3 border-b bg-white px-4 py-3">
-        <Link href={backHref} className="text-lg text-brand-600">← Назад</Link>
+        <Link href={backHref} className="text-lg text-brand-600">← Orqaga</Link>
         <div className="ml-auto text-sm text-gray-500">
-          {printerName ? `🟢 ${printerName}` : 'Принтер не подключён'}
+          {printerName ? `🟢 ${printerName}` : 'Printer ulanmagan'}
         </div>
       </div>
 
@@ -146,12 +146,12 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
-            alt={`Бейджик заказа ${data.orderNumber}`}
+            alt={`${data.orderNumber} buyurtma yorligʻi`}
             className="w-full max-w-[380px] border border-gray-300 bg-white shadow-lg"
             style={{ imageRendering: 'pixelated' }}
           />
         ) : (
-          <div className="py-24 text-gray-500">Готовлю бейджик…</div>
+          <div className="py-24 text-gray-500">Yorliq tayyorlanmoqda…</div>
         )}
       </div>
 
@@ -162,10 +162,10 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
           onClick={() => printBluetooth(false)}
         >
           {status.kind === 'connecting'
-            ? 'Подключаюсь…'
+            ? 'Ulanmoqda…'
             : status.kind === 'printing'
-              ? `Печатаю… ${Math.round(status.progress * 100)}%`
-              : '🖨 Печать по Bluetooth'}
+              ? `Chop etilmoqda… ${Math.round(status.progress * 100)}%`
+              : '🖨 Bluetooth orqali chop etish'}
         </button>
 
         {status.kind === 'printing' && (
@@ -174,26 +174,26 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
           </div>
         )}
         {status.kind === 'done' && (
-          <p className="rounded-xl bg-emerald-50 p-3 text-center text-lg font-semibold text-emerald-700">✅ Отправлено на принтер</p>
+          <p className="rounded-xl bg-emerald-50 p-3 text-center text-lg font-semibold text-emerald-700">✅ Printerga yuborildi</p>
         )}
         {status.kind === 'error' && (
           <p className="rounded-xl bg-red-50 p-3 text-center font-medium text-red-700">{status.message}</p>
         )}
         {!btSupported && (
           <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
-            Этот браузер не умеет Bluetooth-печать. На Android откройте страницу в <b>Chrome</b>, на iPhone — в браузере{' '}
-            <b>Bluefy</b>. Или используйте системную печать ниже.
+            Bu brauzer Bluetooth orqali chop eta olmaydi. Androidʼda sahifani <b>Chrome</b>ʼda, iPhoneʼda{' '}
+            <b>Bluefy</b> brauzerida oching. Yoki pastdagi tizim orqali chop etishdan foydalaning.
           </p>
         )}
 
         <button className="btn-secondary btn-xl" disabled={!canvas} onClick={() => window.print()}>
-          Системная печать
+          Tizim orqali chop etish
         </button>
 
         {printerName && (
           <div className="flex justify-center gap-6 text-sm">
             <button className="text-brand-600 underline" disabled={busy} onClick={() => printBluetooth(true)}>
-              Выбрать другой принтер
+              Boshqa printerni tanlash
             </button>
             <button
               className="text-gray-500 underline"
@@ -203,21 +203,21 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
                 setPrinterName(null);
               }}
             >
-              Отключить
+              Uzish
             </button>
           </div>
         )}
 
         <details className="rounded-2xl bg-gray-50 p-4">
-          <summary className="cursor-pointer font-semibold">⚙️ Настройки принтера</summary>
+          <summary className="cursor-pointer font-semibold">⚙️ Printer sozlamalari</summary>
           <div className="mt-4 space-y-4">
             <div>
-              <span className="label">Режим принтера (язык команд)</span>
+              <span className="label">Printer rejimi (buyruqlar tili)</span>
               <div className="grid grid-cols-2 gap-2">
                 {(
                   [
-                    ['tspl', 'Этикетки (TSPL)'],
-                    ['escpos', 'Чеки (ESC/POS)'],
+                    ['tspl', 'Etiketkalar (TSPL)'],
+                    ['escpos', 'Cheklar (ESC/POS)'],
                   ] as const
                 ).map(([value, label]) => (
                   <button
@@ -233,27 +233,27 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
                 ))}
               </div>
               <p className="mt-1 text-xs text-gray-500">
-                Если вместо бейджика печатаются непонятные символы — переключите режим.
+                Agar yorliq oʻrniga tushunarsiz belgilar chiqsa — rejimni almashtiring.
               </p>
             </div>
 
             {settings.protocol === 'tspl' && (
               <>
                 <div>
-                  <span className="label">Бумага</span>
+                  <span className="label">Qogʻoz</span>
                   <select
                     className="input"
                     value={settings.paper}
                     onChange={(e) => updateSettings({ paper: e.target.value as PrintSettings['paper'] })}
                   >
-                    <option value="roll">Непрерывная лента 80 мм (длина по бейджику)</option>
-                    <option value="label">Этикетки с зазором</option>
+                    <option value="roll">Uzluksiz lenta 80 mm (uzunligi yorliqqa qarab)</option>
+                    <option value="label">Oraliqli etiketkalar</option>
                   </select>
                 </div>
                 {settings.paper === 'label' && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="label" htmlFor="labelHeight">Высота этикетки, мм</label>
+                      <label className="label" htmlFor="labelHeight">Etiketka balandligi, mm</label>
                       <input
                         id="labelHeight"
                         type="number"
@@ -265,7 +265,7 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
                       />
                     </div>
                     <div>
-                      <label className="label" htmlFor="gap">Зазор, мм</label>
+                      <label className="label" htmlFor="gap">Oraliq, mm</label>
                       <input
                         id="gap"
                         type="number"
@@ -279,7 +279,7 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
                   </div>
                 )}
                 <div>
-                  <label className="label" htmlFor="density">Яркость печати: {settings.density}</label>
+                  <label className="label" htmlFor="density">Chop etish toʻqligi: {settings.density}</label>
                   <input
                     id="density"
                     type="range"
@@ -300,16 +300,16 @@ export function BadgePrinter({ data, backHref }: { data: BadgeData; backHref: st
                 checked={settings.flip}
                 onChange={(e) => updateSettings({ flip: e.target.checked })}
               />
-              Перевернуть на 180° (если выходит вверх ногами)
+              180° ga aylantirish (agar teskari chiqsa)
             </label>
 
             {canvas && (
               <p className="text-xs text-gray-500">
-                Размер бейджика: {BADGE_WIDTH_MM} × {Math.ceil(canvas.height / DOTS_PER_MM)} мм ({canvas.width} × {canvas.height} точек, 203 dpi)
+                Yorliq oʻlchami: {BADGE_WIDTH_MM} × {Math.ceil(canvas.height / DOTS_PER_MM)} mm ({canvas.width} × {canvas.height} nuqta, 203 dpi)
                 {settings.protocol === 'tspl' &&
                   settings.paper === 'label' &&
                   canvas.height / DOTS_PER_MM > settings.labelHeightMm - 2 &&
-                  ' — будет уменьшен под высоту этикетки'}
+                  ' — etiketka balandligiga moslab kichraytiriladi'}
               </p>
             )}
           </div>

@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   const secret = requireServerEnv('TELEGRAM_WEBHOOK_SECRET');
   if (request.nextUrl.searchParams.get('secret') !== secret) {
-    return NextResponse.json({ ok: false, error: 'Неверный secret' }, { status: 401 });
+    return NextResponse.json({ ok: false, error: 'secret notoʻgʻri' }, { status: 401 });
   }
 
   const baseUrl = APP_URL || request.nextUrl.origin;
@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     drop_pending_updates: true,
   });
   await telegram.setMyCommands([
-    { command: 'start', description: 'Подключение и chat_id' },
-    { command: 'tasks', description: 'Текущие задачи мастера' },
+    { command: 'start', description: 'Ulanish va chat_id' },
+    { command: 'tasks', description: 'Ustaning joriy vazifalari' },
   ]);
   if (baseUrl.startsWith('https://')) await setupMenuButton(baseUrl);
 
