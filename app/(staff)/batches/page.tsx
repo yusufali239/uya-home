@@ -7,14 +7,14 @@ import type { CutBatch } from '@/lib/types';
 export const metadata: Metadata = { title: 'Kesish partiyalari' };
 export const dynamic = 'force-dynamic';
 
-type BatchRow = CutBatch & { cut_batch_items: { quantity_to_produce: number; products: { name: string } | null }[] };
+type BatchRow = CutBatch & { cut_batch_items: { quantity_to_produce: number; products: { name: string; color: string | null } | null }[] };
 
 /** /batches — партии раскроя */
 export default async function BatchesPage() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from('cut_batches')
-    .select('*, cut_batch_items(quantity_to_produce, products(name))')
+    .select('*, cut_batch_items(quantity_to_produce, products(name, color))')
     .order('batch_number', { ascending: false })
     .limit(100);
   if (error) throw new Error(error.message);
@@ -43,7 +43,7 @@ export default async function BatchesPage() {
               </div>
               <ul className="mt-2 text-sm">
                 {b.cut_batch_items.map((i, idx) => (
-                  <li key={idx}>• {i.products?.name} — {i.quantity_to_produce} dona</li>
+                  <li key={idx}>• {i.products?.name}{i.products?.color && ` (${i.products.color})`} — {i.quantity_to_produce} dona</li>
                 ))}
               </ul>
             </Link>

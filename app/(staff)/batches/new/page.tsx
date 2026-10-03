@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function NewBatchPage() {
   const supabase = createClient();
   const [{ data: products }, { data: waiting }] = await Promise.all([
-    supabase.from('products').select('id, name, sku, color, min_quantity, inventory_finished(quantity)').order('name'),
+    supabase.from('products').select('id, name, sku, color, min_quantity, inventory_finished(quantity)').order('name').order('color'),
     supabase.from('orders').select('product_id, quantity').eq('status', 'waiting_production'),
   ]);
 

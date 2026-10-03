@@ -26,7 +26,7 @@ export async function createOrder(_prev: ActionState, formData: FormData): Promi
   const clientAddress = str(formData, 'client_address');
 
   if (!source || !SOURCES.includes(source)) return { error: 'Buyurtma qayerdan kelganini tanlang' };
-  if (!productId) return { error: 'Mahsulotni tanlang' };
+  if (!productId) return { error: 'Mahsulot va rangini tanlang' };
   if (!Number.isInteger(quantity) || quantity <= 0) return { error: 'Soni — noldan katta butun son' };
   if (!clientName || !clientPhone || !clientAddress) return { error: 'F.I.Sh., telefon va manzilni toʻldiring' };
 

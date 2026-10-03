@@ -11,11 +11,13 @@ export default async function NewOrderPage() {
   const supabase = createClient();
   const { data } = await supabase
     .from('products')
-    .select('id, name, sku, color, inventory_finished(quantity)')
-    .order('name');
+    .select('id, model_id, name, sku, color, inventory_finished(quantity)')
+    .order('name')
+    .order('color');
 
   const products: OrderProductOption[] = (data ?? []).map((p) => ({
     id: p.id,
+    model_id: p.model_id,
     name: p.name,
     sku: p.sku,
     color: p.color,

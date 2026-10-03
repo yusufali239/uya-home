@@ -26,7 +26,7 @@ export function StaffNav({ isDirector }: { isDirector: boolean }) {
     <nav className="-mx-1 flex gap-1 overflow-x-auto text-sm font-medium">
       {links.map((link) => {
         const active = 'exact' in link && link.exact
-          ? pathname === link.href || pathname.startsWith('/admin/products')
+          ? pathname === link.href || pathname.startsWith('/admin/products') || pathname.startsWith('/admin/models')
           : pathname.startsWith(link.href);
         return (
           <Link

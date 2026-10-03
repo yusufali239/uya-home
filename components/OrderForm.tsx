@@ -10,6 +10,7 @@ import type { OrderSource } from '@/lib/types';
 
 export interface OrderProductOption {
   id: string;
+  model_id: string;
   name: string;
   sku: string;
   color: string | null;
@@ -21,8 +22,25 @@ const SOURCES = Object.keys(SOURCE_LABELS) as OrderSource[];
 /** Форма заказа: Откуда? → Что? → Клиент */
 export function OrderForm({ products }: { products: OrderProductOption[] }) {
   const [state, action] = useFormState(createOrder, {});
+  const [modelId, setModelId] = useState('');
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  // Модели с их цветами (порядок — как пришли с сервера)
+  const models = new Map<string, { name: string; colors: OrderProductOption[] }>();
+  for (const p of products) {
+    const m = models.get(p.model_id) ?? { name: p.name, colors: [] };
+    m.colors.push(p);
+    models.set(p.model_id, m);
+  }
+  const colors = models.get(modelId)?.colors ?? [];
+
+  function chooseModel(id: string) {
+    setModelId(id);
+    const list = models.get(id)?.colors ?? [];
+    // Один цвет — выбираем сразу
+    setProductId(list.length === 1 ? list[0].id : '');
+  }
 
   const selected = products.find((p) => p.id === productId);
   const inStock = selected ? selected.stock >= quantity : null;
@@ -47,19 +65,19 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
         <h2 className="font-semibold">2. Nima buyurtma qilindi?</h2>
         <div className="grid gap-3 sm:grid-cols-[1fr_8rem]">
           <div>
-            <label className="label" htmlFor="product_id">Mahsulot</label>
+            <label className="label" htmlFor="model_id">Mahsulot</label>
             <select
-              id="product_id"
-              name="product_id"
+              id="model_id"
               required
               className="input"
-              value={productId}
-              onChange={(e) => setProductId(e.target.value)}
+              value={modelId}
+              onChange={(e) => chooseModel(e.target.value)}
             >
               <option value="">— tanlang —</option>
-              {products.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name} ({p.sku}{p.color ? `, ${p.color}` : ''}) — omborda {p.stock}
+              {[...models.entries()].map(([id, m]) => (
+                <option key={id} value={id}>
+                  {m.name} — omborda {m.colors.reduce((s, c) => s + c.stock, 0)}
+                  {m.colors.length > 1 ? ` (${m.colors.length} rang)` : ''}
                 </option>
               ))}
             </select>
@@ -78,6 +96,29 @@ export function OrderForm({ products }: { products: OrderProductOption[] }) {
             />
           </div>
         </div>
+        {colors.length > 0 && (
+          <div>
+            <span className="label">Rangi</span>
+            <input type="hidden" name="product_id" value={productId} />
+            <div className="flex flex-wrap gap-2">
+              {colors.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setProductId(c.id)}
+                  className={`rounded-xl px-3 py-2 text-left text-sm ring-1 ${
+                    productId === c.id ? 'bg-brand-600 text-white ring-brand-600' : 'ring-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="font-semibold">{c.color || '—'}</span>
+                  <span className={`block text-xs ${productId === c.id ? 'text-white/80' : 'text-gray-500'}`}>
+                    {c.sku} · omborda {c.stock}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {selected && (
           <p
             className={`rounded-xl px-3 py-2 text-sm font-medium ${

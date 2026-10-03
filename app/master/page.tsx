@@ -5,7 +5,7 @@ import type { CutBatch, Order } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-type OrderTask = Order & { products: { name: string } | null };
+type OrderTask = Order & { products: { name: string; color: string | null } | null };
 type BatchTask = CutBatch & { cut_batch_items: { quantity_to_produce: number }[] };
 
 /** Список задач мастера: партии к раскрою и заказы к отгрузке */
@@ -19,7 +19,7 @@ export default async function MasterPage() {
       .order('batch_number'),
     supabase
       .from('orders')
-      .select('*, products(name)')
+      .select('*, products(name, color)')
       .eq('status', 'ready_to_ship')
       .order('created_at'),
   ]);
@@ -68,7 +68,7 @@ export default async function MasterPage() {
             <Link key={o.id} href={`/master/order/${o.id}`} className="card block p-5 active:scale-[0.99]">
               <div className="text-2xl font-bold">№{o.order_number} buyurtma</div>
               <div className="mt-1 text-lg">
-                {o.products?.name} × {o.quantity}
+                {o.products?.name}{o.products?.color && ` (${o.products.color})`} × {o.quantity}
               </div>
               <div className="mt-1 text-gray-500">
                 {o.client_name} · {formatDateTime(o.created_at)}

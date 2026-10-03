@@ -13,8 +13,38 @@ export interface Profile {
   created_at: string;
 }
 
+/** Модель мебели: общие поля для всех её цветов */
+export interface ProductModel {
+  id: string;
+  name: string;
+  dimensions: string | null;
+  price: number;
+  cost_price: number;
+  sketchcut_file_url: string | null;
+  instruction_url: string | null;
+  photo_url: string | null;
+  description: string | null;
+  created_at: string;
+}
+
+/** Деталь модели (что вырезается из ЛДСП на одно изделие) */
+export interface ProductPart {
+  id: string;
+  model_id: string;
+  name: string;
+  length_mm: number;
+  width_mm: number;
+  thickness_mm: number;
+  quantity: number;
+  edge: string | null;
+  notes: string | null;
+  sort: number;
+}
+
+/** Товар = цвет модели; name/dimensions/price/файлы копируются из модели */
 export interface Product {
   id: string;
+  model_id: string;
   name: string;
   sku: string;
   color: string | null;

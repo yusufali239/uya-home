@@ -8,7 +8,14 @@ import type { Order } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 type OrderWithProduct = Order & {
-  products: { name: string; sku: string; brand_photo_url: string | null; instruction_url: string | null } | null;
+  products: {
+    name: string;
+    sku: string;
+    color: string | null;
+    brand_photo_url: string | null;
+    instruction_url: string | null;
+    product_models: { photo_url: string | null } | null;
+  } | null;
 };
 
 /** Заказ глазами мастера: бейджик и отгрузка */
@@ -16,12 +23,13 @@ export default async function MasterOrderPage({ params }: { params: { id: string
   const supabase = createClient();
   const { data } = await supabase
     .from('orders')
-    .select('*, products(name, sku, brand_photo_url, instruction_url)')
+    .select('*, products(name, sku, color, brand_photo_url, instruction_url, product_models(photo_url))')
     .eq('id', params.id)
     .maybeSingle();
   if (!data) notFound();
 
   const order = { ...data, products: one(data.products) } as OrderWithProduct;
+  const photo = order.products?.brand_photo_url ?? one(order.products?.product_models)?.photo_url;
   const { data: inventory } = await supabase
     .from('inventory_finished')
     .select('location')
@@ -41,13 +49,15 @@ export default async function MasterOrderPage({ params }: { params: { id: string
         </div>
 
         <div className="flex items-center gap-4">
-          {order.products?.brand_photo_url && (
+          {photo && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={order.products.brand_photo_url} alt="" className="h-20 w-20 rounded-xl object-cover" />
+            <img src={photo} alt="" className="h-20 w-20 rounded-xl object-cover" />
           )}
           <div>
             <div className="text-xl font-semibold">{order.products?.name} × {order.quantity}</div>
-            <div className="text-gray-500">{order.products?.sku}</div>
+            <div className="text-gray-500">
+              {[order.products?.color, order.products?.sku].filter(Boolean).join(' · ')}
+            </div>
             {inventory?.location && <div className="text-lg font-semibold text-brand-700">📍 {inventory.location}</div>}
           </div>
         </div>

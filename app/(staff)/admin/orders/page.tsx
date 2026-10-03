@@ -16,7 +16,7 @@ const FILTERS: { key: string; label: string; statuses: OrderStatus[] | null }[] 
   { key: 'all', label: 'Hammasi', statuses: null },
 ];
 
-type OrderRow = Order & { products: { name: string; sku: string } | null };
+type OrderRow = Order & { products: { name: string; sku: string; color: string | null } | null };
 
 export default async function OrdersPage({
   searchParams,
@@ -28,7 +28,7 @@ export default async function OrdersPage({
   const supabase = createClient();
   let query = supabase
     .from('orders')
-    .select('*, products(name, sku)')
+    .select('*, products(name, sku, color)')
     .order('created_at', { ascending: false })
     .limit(200);
   if (filter.statuses) query = query.in('status', filter.statuses);
@@ -97,7 +97,7 @@ export default async function OrdersPage({
                   </td>
                   <td className="px-4 py-3">
                     {o.products?.name ?? '—'} × {o.quantity}
-                    <div className="text-xs text-gray-500">{o.products?.sku}</div>
+                    <div className="text-xs text-gray-500">{[o.products?.color, o.products?.sku].filter(Boolean).join(' · ')}</div>
                   </td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{o.client_name}</div>

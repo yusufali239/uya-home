@@ -69,7 +69,7 @@ async function buildTasksText(): Promise<string> {
       .order('batch_number'),
     supabase
       .from('orders')
-      .select('order_number, quantity, client_name, products(name)')
+      .select('order_number, quantity, client_name, products(name, color)')
       .eq('status', 'ready_to_ship')
       .order('created_at'),
   ]);
@@ -90,7 +90,7 @@ async function buildTasksText(): Promise<string> {
     lines.push('', '📦 Joʻnatish uchun:');
     for (const o of orders) {
       const product = Array.isArray(o.products) ? o.products[0] : o.products;
-      lines.push(`• №${o.order_number}: ${product?.name ?? '?'} × ${o.quantity} — ${o.client_name}`);
+      lines.push(`• №${o.order_number}: ${product?.name ?? '?'}${product?.color ? ` (${product.color})` : ''} × ${o.quantity} — ${o.client_name}`);
     }
   }
 

@@ -1,23 +1,27 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { BatchParts } from '@/components/BatchParts';
 import { BATCH_STATUS, formatDateTime } from '@/lib/format';
+import { loadBatchParts } from '@/lib/parts';
 import { createClient } from '@/lib/supabase/server';
 import type { CutBatch, CutBatchItem, ScrapRemnant } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-type Item = CutBatchItem & { products: { name: string; sku: string } | null };
+type Item = CutBatchItem & { products: { model_id: string; name: string; sku: string; color: string | null } | null };
 
 /** Детали партии для менеджера */
 export default async function BatchPage({ params, searchParams }: { params: { id: string }; searchParams: { created?: string } }) {
   const supabase = createClient();
   const [{ data: batch }, { data: items }, { data: remnants }] = await Promise.all([
     supabase.from('cut_batches').select('*').eq('id', params.id).maybeSingle(),
-    supabase.from('cut_batch_items').select('*, products(name, sku)').eq('batch_id', params.id),
+    supabase.from('cut_batch_items').select('*, products(model_id, name, sku, color)').eq('batch_id', params.id),
     supabase.from('scrap_remnants').select('*').eq('batch_id', params.id),
   ]);
   if (!batch) notFound();
   const b = batch as CutBatch;
+  const list = (items ?? []) as Item[];
+  const parts = await loadBatchParts(list.map((i) => ({ quantity: i.quantity_to_produce, product: i.products })));
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
@@ -57,9 +61,13 @@ export default async function BatchPage({ params, searchParams }: { params: { id
             </tr>
           </thead>
           <tbody className="divide-y">
-            {((items ?? []) as Item[]).map((i) => (
+            {list.map((i) => (
               <tr key={i.id}>
-                <td className="px-4 py-2">{i.products?.name} <span className="text-xs text-gray-500">{i.products?.sku}</span></td>
+                <td className="px-4 py-2">
+                  {i.products?.name}
+                  {i.products?.color && ` · ${i.products.color}`}{' '}
+                  <span className="text-xs text-gray-500">{i.products?.sku}</span>
+                </td>
                 <td className="px-4 py-2 text-right">{i.quantity_to_produce}</td>
                 <td className="px-4 py-2 text-right font-semibold">{i.quantity_produced ?? '—'}</td>
               </tr>
@@ -67,6 +75,8 @@ export default async function BatchPage({ params, searchParams }: { params: { id
           </tbody>
         </table>
       </div>
+
+      <BatchParts {...parts} />
 
       {remnants && remnants.length > 0 && (
         <div className="card text-sm">

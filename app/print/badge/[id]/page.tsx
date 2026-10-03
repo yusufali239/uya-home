@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: 'Yorliq' };
 export const dynamic = 'force-dynamic';
 
 type OrderForBadge = Order & {
-  products: { name: string; sku: string; color: string | null; dimensions: string | null; brand_photo_url: string | null } | null;
+  products: { name: string; sku: string; color: string | null; dimensions: string | null; brand_photo_url: string | null; product_models: { photo_url: string | null } | null } | null;
 };
 
 /**
@@ -25,7 +25,7 @@ export default async function BadgePage({ params }: { params: { id: string } }) 
   const supabase = createClient();
   const { data } = await supabase
     .from('orders')
-    .select('*, products(name, sku, color, dimensions, brand_photo_url)')
+    .select('*, products(name, sku, color, dimensions, brand_photo_url, product_models(photo_url))')
     .eq('id', params.id)
     .maybeSingle();
   if (!data) notFound();
@@ -39,7 +39,7 @@ export default async function BadgePage({ params }: { params: { id: string } }) 
     color: order.products?.color ?? null,
     dimensions: order.products?.dimensions ?? null,
     quantity: order.quantity,
-    photoUrl: order.products?.brand_photo_url ?? null,
+    photoUrl: order.products?.brand_photo_url ?? one(order.products?.product_models)?.photo_url ?? null,
     clientName: order.client_name,
     clientPhone: order.client_phone,
     clientAddress: order.client_address,

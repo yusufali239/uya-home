@@ -1,25 +1,28 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BatchActions } from '@/components/BatchActions';
+import { BatchParts } from '@/components/BatchParts';
 import { BATCH_STATUS } from '@/lib/format';
+import { loadBatchParts } from '@/lib/parts';
 import { createClient } from '@/lib/supabase/server';
 import type { CutBatch, CutBatchItem } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-type Item = CutBatchItem & { products: { name: string; sku: string; color: string | null } | null };
+type Item = CutBatchItem & { products: { model_id: string; name: string; sku: string; color: string | null } | null };
 
 /** Партия глазами мастера */
 export default async function MasterBatchPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
   const [{ data: batch }, { data: itemsRaw }] = await Promise.all([
     supabase.from('cut_batches').select('*').eq('id', params.id).maybeSingle(),
-    supabase.from('cut_batch_items').select('*, products(name, sku, color)').eq('batch_id', params.id),
+    supabase.from('cut_batch_items').select('*, products(model_id, name, sku, color)').eq('batch_id', params.id),
   ]);
   if (!batch) notFound();
 
   const b = batch as CutBatch;
   const items = (itemsRaw ?? []) as Item[];
+  const parts = await loadBatchParts(items.map((i) => ({ quantity: i.quantity_to_produce, product: i.products })));
 
   return (
     <>
@@ -47,6 +50,8 @@ export default async function MasterBatchPage({ params }: { params: { id: string
           ))}
         </ul>
       </div>
+
+      <BatchParts {...parts} />
 
       {b.sketchcut_file_url ? (
         <a href={`${b.sketchcut_file_url}?download=`} className="btn-secondary btn-xl" target="_blank" rel="noreferrer">
