@@ -4,6 +4,8 @@
  *
  *   node scripts/setup.mjs
  *
+ * В песочницах с HTTP-прокси (Node 22+) запускайте с NODE_USE_ENV_PROXY=1.
+ *
  * Шаги (каждый пропускается, если для него нет ключа):
  *   1. Миграции Supabase              — SUPABASE_ACCESS_TOKEN (или SUPABASE_DB_URL + psql)
  *   2. Аккаунт директора              — SUPABASE_SERVICE_ROLE_KEY + DIRECTOR_EMAIL
@@ -66,6 +68,8 @@ async function http(url, { method = 'GET', headers = {}, body, allow = [] } = {}
 }
 
 const summary = {};
+/** Вебхук чужого сервиса (бот занят) */
+let foreignWebhook = null;
 
 // ═════════════════════════════════════════════════════════════════════
 // 1. Миграции Supabase
@@ -214,6 +218,13 @@ async function findMasterChats() {
 
   // getUpdates не работает при активном вебхуке — временно снимаем (апдейты не теряются)
   const info = await tg('getWebhookInfo');
+  if (info.url && !info.url.endsWith('/api/telegram/webhook') && env.TELEGRAM_TAKEOVER !== '1') {
+    // Бот уже обслуживает другой сервис — не ломаем его без явного разрешения
+    foreignWebhook = info.url;
+    warn(`Бот подключён к другому сервису (${new URL(info.url).host}). Вебхук не трогаю.`);
+    warn('Задайте TELEGRAM_MASTER_CHAT_ID вручную, или TELEGRAM_TAKEOVER=1, чтобы забрать бота под UYA HOME');
+    return;
+  }
   if (info.url) {
     if (!env.VERCEL_TOKEN) {
       // Без Vercel не сможем поставить вебхук обратно — не трогаем работающего бота
@@ -274,6 +285,10 @@ async function deployVercel() {
   } else {
     ok(`Проект ${PROJECT_NAME} уже есть`);
   }
+  if (project.framework !== 'nextjs') {
+    await http(api(`/v9/projects/${project.id}`), { method: 'PATCH', headers, body: { framework: 'nextjs' } });
+    ok('Фреймворк проекта: Next.js');
+  }
 
   // Адрес продакшена
   const domains = (await http(api(`/v9/projects/${project.id}/domains`), { headers })).data?.domains ?? [];
@@ -307,8 +322,8 @@ async function deployVercel() {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'inherit'],
       env: { ...env, VERCEL_ORG_ID: env.VERCEL_TEAM_ID || project.accountId, VERCEL_PROJECT_ID: project.id },
-    }).trim().split('\n').pop();
-    ok(`Задеплоено: ${url}`);
+    });
+    ok(`Задеплоено: ${/https:\/\/\S+\.vercel\.app/.exec(url)?.[0] ?? 'готово'}`);
   };
 
   await setEnv();
@@ -336,18 +351,23 @@ async function setupWebhook(appUrl) {
   if (!env.TELEGRAM_BOT_TOKEN) return skip('Нет TELEGRAM_BOT_TOKEN');
   if (!appUrl) return skip('Нет адреса сайта (Vercel не настроен) — вебхук не ставлю');
 
-  await tg('setWebhook', {
-    url: `${appUrl}/api/telegram/webhook`,
-    secret_token: env.TELEGRAM_WEBHOOK_SECRET,
-    allowed_updates: ['message'],
-  });
-  await tg('setMyCommands', {
-    commands: [
-      { command: 'start', description: 'Подключение и chat_id' },
-      { command: 'tasks', description: 'Текущие задачи мастера' },
-    ],
-  });
-  ok(`Вебхук: ${appUrl}/api/telegram/webhook`);
+  if (foreignWebhook) {
+    skip(`Бот занят другим сервисом (${new URL(foreignWebhook).host}) — вебхук не ставлю.`);
+    skip('Уведомления мастеру всё равно уйдут, не будут работать только команды /start и /tasks');
+  } else {
+    await tg('setWebhook', {
+      url: `${appUrl}/api/telegram/webhook`,
+      secret_token: env.TELEGRAM_WEBHOOK_SECRET,
+      allowed_updates: ['message'],
+    });
+    await tg('setMyCommands', {
+      commands: [
+        { command: 'start', description: 'Подключение и chat_id' },
+        { command: 'tasks', description: 'Текущие задачи мастера' },
+      ],
+    });
+    ok(`Вебхук: ${appUrl}/api/telegram/webhook`);
+  }
 
   for (const chatId of (env.TELEGRAM_MASTER_CHAT_ID || '').split(',').filter(Boolean)) {
     await tg('sendMessage', {
