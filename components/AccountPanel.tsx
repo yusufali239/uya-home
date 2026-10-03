@@ -1,22 +1,19 @@
 import { signOut } from '@/app/actions/auth';
 import { unlinkTelegram } from '@/app/actions/account';
 import { PasswordForm } from '@/components/PasswordForm';
+import { getSessionClaims } from '@/lib/auth';
 import { ROLE_LABELS } from '@/lib/format';
-import { createClient } from '@/lib/supabase/server';
 import type { Profile } from '@/lib/types';
 
 /** Профиль сотрудника: данные, пароль, привязка Telegram */
 export async function AccountPanel({ profile }: { profile: Profile }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await getSessionClaims();
 
   return (
     <div className="space-y-4">
       <div className="card space-y-1">
         <div className="text-xl font-bold">{profile.full_name}</div>
-        <div className="text-gray-600">{user?.email}</div>
+        <div className="text-gray-600">{session?.email}</div>
         <div className="badge bg-brand-100 text-brand-900">{ROLE_LABELS[profile.role]}</div>
       </div>
 

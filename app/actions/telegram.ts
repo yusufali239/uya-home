@@ -33,9 +33,8 @@ export async function tgEnter(initData: string): Promise<TgEnterResult> {
     .eq('telegram_id', tgUser.id)
     .maybeSingle();
 
-  const {
-    data: { user: current },
-  } = await supabase.auth.getUser();
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const current = claimsData?.claims?.sub ? { id: claimsData.claims.sub } : null;
 
   // Уже вошёл именно этим сотрудником — просто открываем его экран
   if (linked && current?.id === linked.id) {

@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireStaff, requireUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { flushNotifications } from '@/lib/telegram/notify';
+import { scheduleNotifications } from '@/lib/telegram/notify';
 import type { ActionState, OrderSource } from '@/lib/types';
 import { dbError, int, str } from './helpers';
 
@@ -45,7 +45,7 @@ export async function createOrder(_prev: ActionState, formData: FormData): Promi
   if (error) return { error: dbError(error) };
 
   // Триггеры уже положили уведомления в очередь — отправляем в Telegram
-  await flushNotifications();
+  scheduleNotifications();
 
   revalidatePath('/admin');
   revalidatePath('/admin/orders');

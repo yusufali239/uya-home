@@ -1,4 +1,5 @@
 import 'server-only';
+import { waitUntil } from '@vercel/functions';
 import { APP_URL, masterChatIds } from '@/lib/env';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getBot } from '@/lib/telegram/bot';
@@ -127,4 +128,12 @@ export async function flushNotifications(): Promise<{ sent: number; failed: numb
   }
 
   return { sent, failed };
+}
+
+/**
+ * Отправить уведомления в фоне: кнопка отвечает сразу, а Telegram
+ * досылается после ответа (Vercel держит функцию живой до конца отправки).
+ */
+export function scheduleNotifications(): void {
+  waitUntil(flushNotifications());
 }

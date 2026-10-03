@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireStaff } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { flushNotifications } from '@/lib/telegram/notify';
+import { scheduleNotifications } from '@/lib/telegram/notify';
 import type { ActionState } from '@/lib/types';
 import { dbError, int, money, str } from './helpers';
 
@@ -91,7 +91,7 @@ export async function updateProduct(id: string, _prev: ActionState, formData: Fo
     if (locError) return { error: dbError(locError) };
   }
 
-  await flushNotifications();
+  scheduleNotifications();
   revalidatePath('/admin');
   revalidatePath(`/admin/products/${id}`);
   return { ok: true, message: 'Saqlandi' };

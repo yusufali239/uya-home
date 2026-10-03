@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireStaff, requireUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { flushNotifications } from '@/lib/telegram/notify';
+import { scheduleNotifications } from '@/lib/telegram/notify';
 import type { ActionState } from '@/lib/types';
 import { dbError, int, str } from './helpers';
 
@@ -41,7 +41,7 @@ export async function createBatch(_prev: ActionState, formData: FormData): Promi
 
   if (error) return { error: dbError(error) };
 
-  await flushNotifications();
+  scheduleNotifications();
   revalidatePath('/batches');
   revalidatePath('/master');
   redirect(`/batches/${data.id}?created=1`);
@@ -87,7 +87,7 @@ export async function completeBatch(batchId: string, input: CompleteBatchInput):
   });
   if (error) return { error: dbError(error) };
 
-  await flushNotifications();
+  scheduleNotifications();
   revalidatePath('/master');
   revalidatePath('/admin');
   revalidatePath('/batches');

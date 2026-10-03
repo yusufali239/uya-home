@@ -25,9 +25,10 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims проверяет подпись JWT локально (ES256 + кешированные ключи) — без запроса в Supabase.
+  // Если токен истёк, клиент сам обновит его и запишет новые cookies.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims?.sub ? data.claims : null;
 
   const { pathname } = request.nextUrl;
   // /tg — вход из Telegram Mini App, сам решает, нужна ли авторизация

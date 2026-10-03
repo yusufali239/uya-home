@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { requireStaff, requireUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
-import { flushNotifications } from '@/lib/telegram/notify';
+import { scheduleNotifications } from '@/lib/telegram/notify';
 import type { ActionState } from '@/lib/types';
 import { dbError, str } from './helpers';
 
@@ -61,7 +61,7 @@ export async function adjustSupply(
   });
   if (error) return { error: dbError(error) };
 
-  await flushNotifications();
+  scheduleNotifications();
   refresh();
   return { ok: true };
 }

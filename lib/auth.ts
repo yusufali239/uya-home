@@ -1,19 +1,32 @@
 import 'server-only';
 import { redirect } from 'next/navigation';
+import { cache } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import type { Profile, UserRole } from '@/lib/types';
 
-/** Текущий пользователь и его профиль (или null, если не вошёл) */
-export async function getCurrentProfile(): Promise<Profile | null> {
+/**
+ * Кто вошёл — по JWT из cookie.
+ * getClaims() проверяет подпись ES256 локально (ключи JWKS кешируются),
+ * без сетевого запроса к Supabase Auth на каждую страницу.
+ * cache() — один раз за запрос, даже если спрашивают layout, страница и компоненты.
+ */
+export const getSessionClaims = cache(async (): Promise<{ id: string; email: string | null } | null> => {
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (!claims?.sub) return null;
+  return { id: claims.sub, email: (claims.email as string | undefined) ?? null };
+});
 
-  const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+/** Текущий пользователь и его профиль (или null, если не вошёл) */
+export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
+  const session = await getSessionClaims();
+  if (!session) return null;
+
+  const supabase = createClient();
+  const { data } = await supabase.from('profiles').select('*').eq('id', session.id).single();
   return (data as Profile | null) ?? null;
-}
+});
 
 /** Требует входа; иначе — на страницу логина */
 export async function requireUser(): Promise<Profile> {
