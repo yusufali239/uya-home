@@ -30,7 +30,8 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  if (!user && pathname !== '/login') {
+  // /tg — вход из Telegram Mini App, сам решает, нужна ли авторизация
+  if (!user && pathname !== '/login' && pathname !== '/tg') {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.search = pathname === '/' ? '' : `?next=${encodeURIComponent(pathname + request.nextUrl.search)}`;

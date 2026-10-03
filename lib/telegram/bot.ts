@@ -15,33 +15,39 @@ export function getBot(): Telegraf {
 
   bot = new Telegraf(requireServerEnv('TELEGRAM_BOT_TOKEN'));
 
-  // /start — приветствие и chat_id, который нужно вписать в TELEGRAM_MASTER_CHAT_ID
+  // /start — приветствие, chat_id и кнопка Mini App
   bot.start(async (ctx) => {
     const chatId = ctx.chat.id;
-    const registered = masterChatIds().includes(String(chatId));
+    const webApp = APP_URL.startsWith('https://');
     await ctx.reply(
       [
         '👋 Это бот UYA HOME.',
         '',
-        'Сюда приходят:',
-        '📦 новые заказы на отправку',
-        '⚠️ сигналы, что товар заканчивается',
-        '🪚 новые партии раскроя',
+        webApp
+          ? 'Нажмите «Открыть UYA HOME» — откроется ваш рабочий экран. В первый раз войдите своим email и паролем, дальше — без пароля.'
+          : '',
+        '',
+        'Сюда приходят: 📦 заказы на отправку, 🪚 партии раскроя, ⚠️ сигналы склада, 💰 записи для подтверждения.',
         '',
         `Ваш chat_id: ${chatId}`,
-        registered
-          ? '✅ Этот чат уже подключён к уведомлениям.'
-          : 'Чтобы получать уведомления, впишите этот chat_id в переменную TELEGRAM_MASTER_CHAT_ID на Vercel.',
-        APP_URL ? `\nЭкран мастера: ${APP_URL}/master` : '',
-        '\nКоманда /tasks — текущие задачи.',
-      ].join('\n'),
+      ]
+        .filter((line, i, all) => line !== '' || all[i - 1] !== '')
+        .join('\n'),
+      webApp
+        ? { reply_markup: { inline_keyboard: [[{ text: '📱 Открыть UYA HOME', web_app: { url: `${APP_URL}/tg` } }]] } }
+        : undefined,
     );
   });
 
   // /tasks — что сейчас в работе (только для подключённых чатов)
   bot.command('tasks', async (ctx) => {
-    if (!masterChatIds().includes(String(ctx.chat.id))) {
-      await ctx.reply('Этот чат не подключён. Отправьте /start, чтобы узнать chat_id.');
+    const { data: linked } = await createAdminClient()
+      .from('profiles')
+      .select('id')
+      .eq('telegram_id', ctx.chat.id)
+      .maybeSingle();
+    if (!linked && !masterChatIds().includes(String(ctx.chat.id))) {
+      await ctx.reply('Сначала откройте UYA HOME кнопкой в меню и войдите — тогда бот вас узнает.');
       return;
     }
     await ctx.reply(await buildTasksText(), { link_preview_options: { is_disabled: true } });
@@ -92,4 +98,11 @@ async function buildTasksText(): Promise<string> {
   if (lines.length === 1) lines.push('', 'Задач нет 🎉');
   if (APP_URL) lines.push('', `${APP_URL}/master`);
   return lines.join('\n');
+}
+
+/** Кнопка «UYA HOME» слева от поля ввода — открывает Mini App */
+export async function setupMenuButton(appUrl: string) {
+  await getBot().telegram.setChatMenuButton({
+    menuButton: { type: 'web_app', text: 'UYA HOME', web_app: { url: `${appUrl}/tg` } },
+  });
 }

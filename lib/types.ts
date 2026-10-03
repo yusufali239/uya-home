@@ -9,6 +9,7 @@ export interface Profile {
   id: string;
   full_name: string | null;
   role: UserRole;
+  telegram_id: number | null;
   created_at: string;
 }
 
@@ -82,6 +83,44 @@ export interface ScrapRemnant {
   color: string | null;
   quantity: number;
   batch_id: string | null;
+  created_at: string;
+}
+
+/** Мелочи склада: евровинты, шканты, кромка… */
+export interface Supply {
+  id: string;
+  name: string;
+  unit: string;
+  quantity: number;
+  min_quantity: number;
+  location: string | null;
+  updated_at: string;
+}
+
+export interface SupplyMovement {
+  id: string;
+  supply_id: string;
+  delta: number;
+  quantity_after: number;
+  note: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export type FinanceKind = 'income' | 'expense' | 'transfer';
+export type FinanceStatus = 'pending' | 'approved' | 'rejected';
+
+export interface FinanceEntry {
+  id: string;
+  kind: FinanceKind;
+  amount: number;
+  category: string | null;
+  description: string | null;
+  person_id: string;
+  to_person_id: string | null;
+  entry_date: string;
+  status: FinanceStatus;
+  created_by: string | null;
   created_at: string;
 }
 

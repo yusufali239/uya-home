@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { APP_URL, requireServerEnv } from '@/lib/env';
-import { getBot } from '@/lib/telegram/bot';
+import { getBot, setupMenuButton } from '@/lib/telegram/bot';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
     { command: 'start', description: 'Подключение и chat_id' },
     { command: 'tasks', description: 'Текущие задачи мастера' },
   ]);
+  if (baseUrl.startsWith('https://')) await setupMenuButton(baseUrl);
 
   const info = await telegram.getWebhookInfo();
   return NextResponse.json({ ok: true, webhook: info.url, pending: info.pending_update_count });

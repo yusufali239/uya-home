@@ -17,9 +17,9 @@ export default async function StaffLayout({ children }: { children: React.ReactN
           </Link>
           <StaffNav isDirector={profile.role === 'director'} />
           <div className="ml-auto flex items-center gap-3 text-sm text-gray-500">
-            <span className="hidden sm:inline">
+            <Link href="/admin/account" className="hidden hover:underline sm:inline">
               {profile.full_name} · {ROLE_LABELS[profile.role]}
-            </span>
+            </Link>
             <form action={signOut}>
               <button className="font-medium text-brand-600 hover:underline">Выйти</button>
             </form>

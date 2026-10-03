@@ -175,6 +175,12 @@ async function createDirector() {
   if (user) {
     skip(`Пользователь ${email} уже есть (пароль не меняю)`);
   } else {
+    // Директор уже заведён (например, email поменяли) — второго не создаём
+    const { data: directors } = await http(`${supabaseUrl}/rest/v1/profiles?role=eq.director&select=id`, { headers });
+    if (directors?.length) {
+      skip(`${email} не найден, но директор уже есть — нового не создаю`);
+      return;
+    }
     const password = env.DIRECTOR_PASSWORD || secret().slice(0, 14);
     const { data } = await http(`${supabaseUrl}/auth/v1/admin/users`, {
       method: 'POST',
@@ -367,6 +373,10 @@ async function setupWebhook(appUrl) {
       ],
     });
     ok(`Вебхук: ${appUrl}/api/telegram/webhook`);
+    await tg('setChatMenuButton', {
+      menu_button: { type: 'web_app', text: 'UYA HOME', web_app: { url: `${appUrl}/tg` } },
+    });
+    ok('Кнопка Mini App «UYA HOME» в меню бота');
   }
 
   for (const chatId of (env.TELEGRAM_MASTER_CHAT_ID || '').split(',').filter(Boolean)) {

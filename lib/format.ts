@@ -1,4 +1,4 @@
-import type { BatchStatus, OrderSource, OrderStatus, UserRole } from '@/lib/types';
+import type { BatchStatus, FinanceKind, FinanceStatus, OrderSource, OrderStatus, UserRole } from '@/lib/types';
 
 /** Подписи источников заказа */
 export const SOURCE_LABELS: Record<OrderSource, string> = {
@@ -30,6 +30,36 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   master: 'Мастер',
 };
 
+export const FINANCE_KIND: Record<FinanceKind, { label: string; sign: string; className: string }> = {
+  income: { label: 'Приход', sign: '+', className: 'text-emerald-700' },
+  expense: { label: 'Расход', sign: '−', className: 'text-red-600' },
+  transfer: { label: 'Передача', sign: '→', className: 'text-blue-700' },
+};
+
+export const FINANCE_STATUS: Record<FinanceStatus, { label: string; className: string }> = {
+  pending: { label: 'Ждёт проверки', className: 'bg-amber-100 text-amber-800' },
+  approved: { label: 'Подтверждено', className: 'bg-emerald-100 text-emerald-700' },
+  rejected: { label: 'Отклонено', className: 'bg-gray-200 text-gray-500 line-through' },
+};
+
+/** Частые статьи для подсказок */
+export const FINANCE_CATEGORIES = {
+  expense: ['Материалы', 'Фурнитура', 'Инструмент', 'Транспорт', 'Аренда', 'Зарплата', 'Коммунальные', 'Реклама', 'Прочее'],
+  income: ['Оплата клиента', 'Предоплата', 'Доставка', 'Прочее'],
+  transfer: ['Сдал в кассу', 'Выдал на расходы'],
+} as const;
+
+/** Количество без лишних нулей: 12.50 → «12,5» */
+export function formatQty(value: number | string): string {
+  return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(value));
+}
+
+/** Дата без времени: 2026-10-03 → «03.10.2026» */
+export function formatDate(isoDate: string): string {
+  const [y, m, d] = isoDate.slice(0, 10).split('-');
+  return `${d}.${m}.${y}`;
+}
+
 /** Склонение: plural(2, ['лист', 'листа', 'листов']) → 'листа' */
 export function plural(n: number, forms: [string, string, string]): string {
   const mod100 = Math.abs(n) % 100;
@@ -43,7 +73,7 @@ export function plural(n: number, forms: [string, string, string]): string {
 /** Деньги в сомах */
 export function formatMoney(value: number | string | null | undefined): string {
   const n = Number(value ?? 0);
-  return `${new Intl.NumberFormat('ru-RU').format(n)} сом`;
+  return `${new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(n)} сом`;
 }
 
 /** Дата и время по-русски (часовой пояс Бишкека) */

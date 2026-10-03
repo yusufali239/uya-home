@@ -7,6 +7,8 @@ const LINKS = [
   { href: '/admin', label: 'Склад', exact: true },
   { href: '/admin/orders', label: 'Заказы' },
   { href: '/batches', label: 'Партии' },
+  { href: '/admin/supplies', label: 'Мелочи' },
+  { href: '/admin/finance', label: 'Бухгалтерия' },
   { href: '/admin/remnants', label: 'Обрезки' },
   { href: '/master', label: 'Экран мастера' },
 ];
@@ -14,7 +16,11 @@ const LINKS = [
 /** Верхнее меню админки с подсветкой текущего раздела */
 export function StaffNav({ isDirector }: { isDirector: boolean }) {
   const pathname = usePathname();
-  const links = isDirector ? [...LINKS, { href: '/admin/users', label: 'Сотрудники' }] : LINKS;
+  const links = [
+    ...LINKS,
+    ...(isDirector ? [{ href: '/admin/users', label: 'Сотрудники' }] : []),
+    { href: '/admin/account', label: 'Профиль' },
+  ];
 
   return (
     <nav className="-mx-1 flex gap-1 overflow-x-auto text-sm font-medium">

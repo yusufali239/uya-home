@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
+import { TelegramShell } from '@/components/TelegramShell';
 
 export const metadata: Metadata = {
   title: { default: 'UYA HOME', template: '%s · UYA HOME' },
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen">
         {children}
         <ServiceWorkerRegister />
+        <TelegramShell />
       </body>
     </html>
   );
