@@ -59,6 +59,28 @@
 
 ---
 
+## Установка одной командой
+
+`npm run setup` (файл `scripts/setup.mjs`) делает всё сам:
+
+1. применяет миграции Supabase (повторный запуск безопасен);
+2. создаёт аккаунт директора и печатает пароль;
+3. находит chat_id мастера — **мастер заранее нажимает «Старт» в боте**;
+4. создаёт проект Vercel (с привязкой к GitHub, если есть доступ), прописывает все переменные и деплоит;
+5. ставит вебхук бота и шлёт мастеру проверочное сообщение.
+
+Нужные переменные (в `.env.local` или в окружении):
+
+| Переменная | Где взять |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API |
+| `SUPABASE_ACCESS_TOKEN` | [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens) — для миграций |
+| `TELEGRAM_BOT_TOKEN` | @BotFather |
+| `VERCEL_TOKEN` | [vercel.com/account/tokens](https://vercel.com/account/tokens) |
+| `DIRECTOR_EMAIL` | ваш email для входа (пароль сгенерируется, или задайте `DIRECTOR_PASSWORD`) |
+
+Секреты вебхука и cron генерируются автоматически. Ниже — то же самое вручную.
+
 ## Запуск
 
 ### 1. Supabase
